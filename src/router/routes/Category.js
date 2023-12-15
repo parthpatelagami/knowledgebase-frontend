@@ -1,15 +1,11 @@
-import { lazy } from 'react'
+import { lazy } from "react";
 
 const CategoryRoutes = [
-    {
-        path: '/history',
-        exact: true,
-        // component: lazy(() => import('@src/views/pages')),
-        // meta: {
-        //     action: 'view',
-        //     resource: 'History'
-        // }
-    }
-]
+  {
+    path: "/category",
+    component: lazy(() => import("@src/views/category")),
+    exact: true,
+  },
+];
 
-export default CategoryRoutes
+export default CategoryRoutes;
