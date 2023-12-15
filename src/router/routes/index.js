@@ -7,6 +7,7 @@ import UsersRoutes from './Users'
 import TeamRoutes from './Team'
 import PermissionsRoutes from './Permissions'
 import MiscellaneousRoutes from './Miscellaneous'
+import ArticlesRoutes  from './Articles'
 // import Category from './Category'
 // import subCategory from './SubCategory'
 // import KnowledgeBaseRoutes from './knowledgeBase'
@@ -26,6 +27,7 @@ const Routes = [
   ...UsersRoutes,
   ...TeamRoutes,
   ...PermissionsRoutes,
+  ...ArticlesRoutes
   // ...Category,
   // ...subCategory,
   // ...KnowledgeBaseRoutes

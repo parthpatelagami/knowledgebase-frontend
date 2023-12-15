@@ -6,8 +6,8 @@ export default [
         id: 'articles',
         title: 'Articles',
         icon: <Home size={20} />,
-        // navLink: '/dashboard',
-        // action: 'view',
-        // resource: 'Dashboard'
+        navLink: '/articles',
+        action: 'view',
+    resource: 'Articles'
     }
 ]

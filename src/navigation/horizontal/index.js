@@ -5,6 +5,7 @@ import task from '../menus/task'
 import users from '../menus/users'
 import team from '../menus/team'
 import permissions from '../menus/permissions'
+import articles from '../menus/articles'
 
 // ** Merge & Export
 export default [
@@ -13,5 +14,6 @@ export default [
     ...task,
     ...users,
     ...team,
-    ...permissions
+    ...permissions,
+    ...articles
 ]
