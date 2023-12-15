@@ -5,6 +5,7 @@ import knowledgeBase from '../menus/knowledgeBase'
 import permissions from '../menus/permissions'
 import users from '../menus/users'
 import subCategory from '../menus/subCategory'
+import articles from '../menus/articles'
 
 // ** Merge & Export
 export default [
@@ -16,5 +17,6 @@ export default [
     // ...task,
     // ...team,
     ...permissions,
-    ...subCategory
+    ...subCategory,
+    ...articles
 ]
