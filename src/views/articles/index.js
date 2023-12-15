@@ -1,9 +1,17 @@
 import React from 'react'
 
-const Articles = () => {
+// ** Styles
+import '@styles/react/apps/app-users.scss'
+
+// ** Custom Components
+import UserTable from '../users/components/UserTable'
+
+const UsersList = () => {
   return (
-    <h1>index</h1>
+    <div className='app-user-list'>
+      <UserTable />
+    </div>
   )
 }
 
-export default Articles
+export default UsersList
