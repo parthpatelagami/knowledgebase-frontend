@@ -29,8 +29,8 @@ const constructACLAbility = (permissions) => {
       default:
     }
   })
-  return ability
-  // return [{ action: 'manage', subject: 'all' }]
+  // return ability
+  return [{ action: 'manage', subject: 'all' }]
 }
 
 export const handleLogin = createAsyncThunk('auth/login', async (event, { rejectWithValue }) => {

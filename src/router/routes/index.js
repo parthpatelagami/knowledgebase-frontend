@@ -7,6 +7,9 @@ import UsersRoutes from './Users'
 import TeamRoutes from './Team'
 import PermissionsRoutes from './Permissions'
 import MiscellaneousRoutes from './Miscellaneous'
+// import Category from './Category'
+// import subCategory from './SubCategory'
+// import KnowledgeBaseRoutes from './knowledgeBase'
 
 // ** Document title
 const TemplateTitle = '%s - Vuexy React Admin Template'
@@ -22,7 +25,10 @@ const Routes = [
   ...TaskRoutes,
   ...UsersRoutes,
   ...TeamRoutes,
-  ...PermissionsRoutes
+  ...PermissionsRoutes,
+  // ...Category,
+  // ...subCategory,
+  // ...KnowledgeBaseRoutes
 ]
 
 export { DefaultRoute, TemplateTitle, Routes }

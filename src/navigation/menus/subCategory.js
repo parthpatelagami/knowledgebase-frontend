@@ -3,8 +3,8 @@ import { FileText } from 'react-feather'
 
 export default [
     {
-        id: 'knowledge-base',
-        title: 'KnowledgeBase',
+        id: 'subcategory',
+        title: 'SubCategory',
         icon: <FileText size={20} />,
         navLink: '/views/pages/knowledge-base'
     }
