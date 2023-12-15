@@ -2,9 +2,9 @@ import { lazy } from 'react'
 
 const KnowledgeBaseRoutes = [
     {
-        path: '/knowledge',
+        path: '/knowledgebase',
         exact: true,
-        component: lazy(() => import('@src/views/pages/knowledge-base')),
+        component: lazy(() => import('@src/views/knowledgebase')),
         // meta: {
         //     action: 'view',
         //     resource: 'History'

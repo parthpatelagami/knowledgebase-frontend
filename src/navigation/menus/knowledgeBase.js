@@ -6,6 +6,6 @@ export default [
         id: 'knowledge-base',
         title: 'KnowledgeBase',
         icon: <FileText size={20} />,
-        navLink: '/views/pages/knowledge-base'
+        navLink: '/knowledgebase'
     }
 ]

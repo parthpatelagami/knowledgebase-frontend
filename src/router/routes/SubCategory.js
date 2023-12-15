@@ -2,9 +2,9 @@ import { lazy } from 'react'
 
 const SubCategoryRoutes = [
     {
-        path: '/history',
+        path: '/subcategory',
         exact: true,
-        // component: lazy(() => import('@src/views/pages')),
+        component: lazy(() => import('@src/views/subategory')),
         // meta: {
         //     action: 'view',
         //     resource: 'History'

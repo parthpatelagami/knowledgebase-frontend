@@ -6,6 +6,6 @@ export default [
         id: 'subcategory',
         title: 'SubCategory',
         icon: <FileText size={20} />,
-        navLink: '/views/pages/knowledge-base'
+        navLink: '/subcategory'
     }
 ]
