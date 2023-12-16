@@ -3,7 +3,7 @@ import React, { Fragment, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
 // ** Actions
-import { suspendUser, getAllUsers } from '../../../store/action'
+import { suspendUser, getAllArticles } from '../../../store/action'
 
 // ** Sweet Alert Import
 import Swal from 'sweetalert2'
@@ -35,7 +35,7 @@ const SuspendForm = ({ rowInfo, componentIndex, selectedAction, setFormAction })
                         try {
                             await dispatch(suspendUser(rowInfo)).unwrap()
                             setFormAction(null)
-                            dispatch(getAllUsers())
+                            dispatch(getAllArticles())
                             return true
                         } catch (error) {
                             setFormAction(null)
@@ -77,7 +77,7 @@ const SuspendForm = ({ rowInfo, componentIndex, selectedAction, setFormAction })
                         try {
                             await dispatch(suspendUser(rowInfo)).unwrap()
                             setFormAction(null)
-                            dispatch(getAllUsers())
+                            dispatch(getAllArticles())
                             return true
                         } catch (error) {
                             setFormAction(null)

@@ -24,7 +24,7 @@ import { selectThemeColors } from '@utils'
 import '@styles/react/libs/react-select/_react-select.scss'
 
 // ** Actions
-import { createNewUser, editUser, getAllUsers } from '../store/action'
+import { createNewUser, editUser, getAllArticles } from '../store/action'
 import { checkEmailID, getAllRoles } from '../../../redux/action'
 
 const MySwal = withReactContent(Swal)
@@ -123,7 +123,7 @@ const AddEditUser = ({ type, setShowAddUserModal, rowInfo, setFormAction, toggle
                     })
                     setFormSubmitting(false)
                     setFormAction(null)
-                    dispatch(getAllUsers())
+                    dispatch(getAllArticles())
                     break
                 case "edit-user":
                     const user_id = rowInfo.user_id
@@ -139,7 +139,7 @@ const AddEditUser = ({ type, setShowAddUserModal, rowInfo, setFormAction, toggle
                     })
                     setFormSubmitting(false)
                     setFormAction(null)
-                    dispatch(getAllUsers())
+                    dispatch(getAllArticles())
                     break
                 default:
             }

@@ -4,7 +4,7 @@ import React from 'react'
 import '@styles/react/apps/app-users.scss'
 
 // ** Custom Components
-import UserTable from '../users/components/UserTable'
+import UserTable from '../articles/components/UserTable'
 
 const UsersList = () => {
   return (

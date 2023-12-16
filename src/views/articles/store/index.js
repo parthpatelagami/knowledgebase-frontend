@@ -6,13 +6,13 @@ import { showNotifications } from "@components/Notifications"
 
 // ** Actions
 import { checkEmailID } from '../../../redux/action'
-import { getAllUsers } from '../store/action'
+import { getAllArticles } from '../store/action'
 
 const userDataSlice = createSlice({
-    name: "users",
+    name: "articles",
     initialState: {
         isEmailIDExist: false,
-        userDataTable: [],
+        articlesDataTable: [],
         isUserDataLoading: false,
         totalUserDataCount: 0
     },
@@ -35,17 +35,18 @@ const userDataSlice = createSlice({
                 })
             })
             // ** FOR FETCHING LIST OF SCORE CARD DATA
-            .addCase(getAllUsers.pending, (state) => {
+            .addCase(getAllArticles.pending, (state) => {
                 state.isUserDataLoading = true
             })
-            .addCase(getAllUsers.fulfilled, (state, action) => {
+            .addCase(getAllArticles.fulfilled, (state, action) => {
+                console.log("ACTION ", action)
                 state.isUserDataLoading = false
-                state.userDataTable = action.payload
+                state.articlesDataTable = action.payload
                 state.totalUserDataCount = action.payload.total_count
             })
-            .addCase(getAllUsers.rejected, (state, action) => {
+            .addCase(getAllArticles.rejected, (state, action) => {
                 state.isUserDataLoading = false
-                state.userDataTable = []
+                state.articlesDataTable = []
                 state.totalUserDataCount = 0
                 console.log(
                     "An error occured while fetching user data: ",

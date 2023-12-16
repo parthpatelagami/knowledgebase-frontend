@@ -39,13 +39,13 @@ export const createNewUser = createAsyncThunk("user/create-new-user", async (eve
 }
 )
 
-export const getAllUsers = createAsyncThunk("user/get-all-users", async (event, { getState, rejectWithValue }) => {
+export const getAllArticles = createAsyncThunk("article/getallarticle", async (event, { getState, rejectWithValue }) => {
     try {
-        const response = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/users/get_all_users`, {})
-        console.log("GET ALL USER RESPONSE ::: ", response)
+        const response = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/article/getallarticle`, {})
+        console.log("GET ALL Article RESPONSE ::: ", response)
         const { status, data } = response
         if (status === 200) {
-            return data.users
+            return data.articles
         } else {
             return rejectWithValue(errorDetail)
         }

@@ -3,7 +3,7 @@ import React, { Fragment, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
 // ** Actions
-import { deleteUser, getAllUsers } from '../../../store/action'
+import { deleteUser, getAllArticles } from '../../../store/action'
 
 // ** Sweet Alert Import
 import Swal from 'sweetalert2'
@@ -34,7 +34,7 @@ const DeleteForm = ({ rowInfo, componentIndex, selectedAction, setFormAction }) 
                     try {
                         await dispatch(deleteUser(rowInfo)).unwrap()
                         setFormAction(null)
-                        dispatch(getAllUsers())
+                        dispatch(getAllArticles())
                         return true
                     } catch (error) {
                         setFormAction(null)

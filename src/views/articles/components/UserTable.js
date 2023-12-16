@@ -38,7 +38,7 @@ import {
 } from 'reactstrap'
 
 // ** Actions
-import { getAllUsers } from '../store/action'
+import { getAllArticles } from '../store/action'
 import { Select } from '@mui/material'
 
 // ** Bootstrap Checkbox Component
@@ -57,10 +57,10 @@ const UserTable = () => {
     const [formAction, setFormAction] = useState(null)
 
     const dispatch = useDispatch()
-    const { userDataTable, isUserDataLoading } = useSelector((state) => state.users)
+    const { articlesDataTable, isUserDataLoading } = useSelector((state) => state.articles)
 
     useEffect(() => {
-        dispatch(getAllUsers())
+        dispatch(getAllArticles())
     }, [])
 
     const toggleAddUserModal = () => {
@@ -73,14 +73,15 @@ const UserTable = () => {
         let updatedData = []
 
         if (value.length) {
-            updatedData = userDataTable.filter((item) => {
+            updatedData = articlesDataTable.filter((item) => {
                 const searchFields = [
-                    item.firstName,
-                    item.lastName,
-                    item.email,
-                    item.role_name,
-                    item.team_name,
-                    item.created_by,
+                    item.ArticlesNames,
+                    item.Category,
+                    item.Sub-Category,
+                    item.Created_Date,
+                    item.Created_By,
+                    item.Updated_Date,
+                    item.Updated_By
                 ]
                 const rowText = searchFields.join(' ').toLowerCase()
                 return rowText.includes(value.toLowerCase())
@@ -103,7 +104,7 @@ const UserTable = () => {
             nextLabel=''
             forcePage={currentPage}
             onPageChange={page => handlePagination(page)}
-            pageCount={searchValue.length ? Math.ceil(filteredData.length / 5) : Math.ceil(userDataTable.length / 5) || 1}
+            pageCount={searchValue.length ? Math.ceil(filteredData.length / 5) : Math.ceil(articlesDataTable.length / 5) || 1}
             breakLabel='...'
             pageRangeDisplayed={2}
             marginPagesDisplayed={2}
@@ -126,7 +127,7 @@ const UserTable = () => {
 
         const columnDelimiter = ','
         const lineDelimiter = '\n'
-        const keys = Object.keys(userDataTable[0])
+        const keys = Object.keys(articlesDataTable[0])
 
         result = ''
         result += keys.join(columnDelimiter)
@@ -168,7 +169,7 @@ const UserTable = () => {
         <Fragment>
             <Card>
                 <CardHeader className='flex-md-row flex-column align-md-items-center align-items-start border-bottom'>
-                    <CardTitle tag='h4'>Users List</CardTitle>
+                    <CardTitle tag='h4'>Articles</CardTitle>
                     <div className='d-flex mt-md-0 mt-1'>
                         <UncontrolledButtonDropdown>
                             <DropdownToggle color='secondary' caret outline>
@@ -176,7 +177,7 @@ const UserTable = () => {
                                 <span className='align-middle ms-50'>Export</span>
                             </DropdownToggle>
                             <DropdownMenu>
-                                <DropdownItem className='w-100' onClick={() => downloadCSV(userDataTable)}>
+                                <DropdownItem className='w-100' onClick={() => downloadCSV(articlesDataTable)}>
                                     <FileText size={15} />
                                     <span className='align-middle ms-50'>CSV</span>
                                 </DropdownItem>
@@ -185,7 +186,7 @@ const UserTable = () => {
                         <Fragment>
                             <Button className='ms-1' id="new-btn" color='primary' onClick={toggleAddUserModal}>
                                 <PlusCircle size={14} />
-                                <span className='align-middle ms-50'>Create New User</span>
+                                <span className='align-middle ms-50'>Create New Articles</span>
                             </Button>
                             <UncontrolledTooltip placement='top' target='new-btn'>
                                 Create New User
@@ -243,7 +244,7 @@ const UserTable = () => {
                                     paginationComponent={CustomPagination}
                                     paginationDefaultPage={currentPage + 1}
                                     selectableRowsComponent={BootstrapCheckbox}
-                                    data={searchValue.length ? filteredData : userDataTable}
+                                    data={searchValue.length ? filteredData : articlesDataTable}
                                 />
                             </div>
                         </>
