@@ -3,7 +3,7 @@ import React, { Fragment, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
 // ** Actions
-import { deleteUser, getAllArticles } from '../../../store/action'
+import { deleteArticle, getAllArticles } from '../../../store/action'
 
 // ** Sweet Alert Import
 import Swal from 'sweetalert2'
@@ -32,7 +32,7 @@ const DeleteForm = ({ rowInfo, componentIndex, selectedAction, setFormAction }) 
                 allowOutsideClick: false,
                 async preConfirm() {
                     try {
-                        await dispatch(deleteUser(rowInfo)).unwrap()
+                        await dispatch(deleteArticle(rowInfo)).unwrap()
                         setFormAction(null)
                         dispatch(getAllArticles())
                         return true

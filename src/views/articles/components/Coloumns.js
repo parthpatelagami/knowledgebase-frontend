@@ -17,7 +17,7 @@ export const columns = [
         name: 'Category',
         sortable: true,
         minWidth: '150px',
-        selector: row => row.Category_id
+        selector: row => row.category_name
     },
     {
         name: 'Sub-Category',

@@ -26,6 +26,7 @@ import '@styles/react/libs/react-select/_react-select.scss'
 // ** Actions
 import { createNewArticle, editUser, getAllArticles } from '../store/action'
 import { checkEmailID, getAllRoles } from '../../../redux/action'
+import {getAllCategory} from '../../category/store/action'
 import SwitchBasic from '../../../@core/components/switch/SwitchBasic'
 import EditorUncontrolled from '../../../@core/components/draftWysiwyg/EditorUncontrolled'
 import FileUploaderMultiple from '../../../@core/components/fileuploader'
@@ -64,9 +65,8 @@ const AddEditUser = ({ type, setShowAddUserModal, rowInfo, setFormAction, toggle
     useEffect(() => {
         async function fetchCategory() {
             try {
-                const response = await dispatch(getAllRoles()).unwrap()
-                const { role } = response
-                const categoryOptions = role.map(r => ({ value: r.role_id, label: r.role_name }))
+                const response = await dispatch(getAllCategory()).unwrap()
+                const categoryOptions = response.map(r => ({ value: r.category_id, label: r.name }))
                 setCategory(categoryOptions)
             } catch (error) {
                 showNotifications({
