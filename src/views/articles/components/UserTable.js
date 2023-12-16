@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { columns } from '../components/Coloumns'
 
 // ** Custom Components
-import AddEditUser from '../components/AddEditUser'
+import AddEditUser from './AddEditArticle'
 
 // ** Third Party Components
 import ReactPaginate from 'react-paginate'

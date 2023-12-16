@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { Modal, ModalHeader, ModalBody } from 'reactstrap'
 
 // ** Sub Component Import
-import AddEditUser from '../../AddEditUser'
+import AddEditUser from '../../AddEditArticle'
 
 const EditForm = ({ componentIndex, selectedAction, rowInfo, setFormAction, }) => {
 
