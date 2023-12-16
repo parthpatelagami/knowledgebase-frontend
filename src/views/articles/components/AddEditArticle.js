@@ -46,6 +46,7 @@ const AddEditUser = ({ type, setShowAddUserModal, rowInfo, setFormAction, toggle
     const { reset, control, handleSubmit, formState: { errors }, setError } = useForm({
         defaultValues: {
             articleName: '',
+            Category: '',
             role: '',
             subCategory: '',
             articleDescription: '',
@@ -96,7 +97,8 @@ const AddEditUser = ({ type, setShowAddUserModal, rowInfo, setFormAction, toggle
     useEffect(() => {
         if (type === 'edit-user') {
             reset({
-                articleName: rowInfo.articleName,
+                articleName: rowInfo.Name,
+                Category: rowInfo.Category_id,
                 role: rowInfo.role,
                 emailId: rowInfo.email,
                 role: rowInfo.role_id
@@ -195,7 +197,7 @@ const AddEditUser = ({ type, setShowAddUserModal, rowInfo, setFormAction, toggle
                             </Label>
                             <Controller
                                 control={control}
-                                name="role"
+                                name="Category"
                                 render={({ field: { onChange, value, ref } }) => (
                                     <Select
                                         isClearable
