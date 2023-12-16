@@ -11,6 +11,7 @@ import {
   Label,
   FormFeedback,
   Spinner,
+  FormGroup,
 } from "reactstrap";
 
 // ** Third Party Components
@@ -71,6 +72,7 @@ const AddEditCategory = ({
     defaultValues: {
       name: "",
       description: "",
+      status: 1,
     },
     mode: "onChange",
     resolver: yupResolver(AddEditCategorySchema),
@@ -84,6 +86,7 @@ const AddEditCategory = ({
     if (type === "edit-category") {
       reset({
         name: rowInfo.name,
+        status: rowInfo.status,
         description: rowInfo.description,
       });
     }
@@ -170,6 +173,58 @@ const AddEditCategory = ({
               {errors.name && (
                 <FormFeedback>{errors.name.message}</FormFeedback>
               )}
+            </Col>
+            <Col md={6} xs={12}>
+              <Label className='form-label' htmlFor='status'>
+                Status
+              </Label>
+              <Controller
+                control={control}
+                id='status'
+                name='status'
+                render={({ field }) => (
+                  <FormGroup tag='fieldset'>
+                    <FormGroup check>
+                      <Input
+                        name='status'
+                        id='statusActive'
+                        type='radio'
+                        checked={field.value === 1}
+                        onChange={() => field.onChange(1)}
+                      />
+                      <Label check>Active</Label>
+                    </FormGroup>
+                    <FormGroup check>
+                      <Input
+                        name='status'
+                        id='statusDeactive'
+                        type='radio'
+                        checked={field.value === 0}
+                        onChange={() => field.onChange(0)}
+                      />
+                      <Label check>Deactive</Label>
+                    </FormGroup>
+                  </FormGroup>
+                )}
+              />
+            </Col>
+            <Col md={6} xs={12}>
+              <Label className='form-label' htmlFor='description'>
+                Description
+              </Label>
+              <Controller
+                control={control}
+                id='description'
+                name='description'
+                render={({ field }) => (
+                  <Input
+                    id='description'
+                    type='textarea'
+                    placeholder='Enter Category Name'
+                    {...field}
+                  />
+                )}
+              />
             </Col>
 
             <Col xs={12} className='text-center mt-2 pt-50'>

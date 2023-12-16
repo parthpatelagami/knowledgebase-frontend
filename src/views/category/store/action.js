@@ -16,8 +16,8 @@ export const createNewCategory = createAsyncThunk(
       const role = parseInt(event.role);
       const postData = {
         name: event.name,
-        // description: event.description,
-        // status: event.status,
+        description: event.description,
+        status: event.status,
         created_date: moment().format("YYYY-MM-DD"),
         created_by: getState().auth.userData.id,
       };
@@ -71,16 +71,15 @@ export const editCategory = createAsyncThunk(
   "category/edit-category",
   async (event, { getState, rejectWithValue }) => {
     try {
-      console.log("POINter ", event);
       const postData = {
         category_id: event.category_id,
         name: event.event.name,
-        description: event.description,
-        status: event.status,
-        created_date: moment().format("YYYY-MM-DD"),
-        created_by: getState().auth.userData.id,
+        description: event.event.description,
+        status: event.event.status,
+        updated_date: moment().format("YYYY-MM-DD"),
+        updated_by: getState().auth.userData.id,
       };
-      console.log("data ", postData);
+
       const response = await axios.post(
         `${process.env.REACT_APP_API_ENDPOINT}/api/v1/category/edit_category`,
         postData
