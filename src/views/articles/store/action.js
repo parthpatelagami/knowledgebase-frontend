@@ -9,7 +9,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 // ** Third Party Components
 import moment from "moment"
 
-export const createNewUser = createAsyncThunk("user/create-new-user", async (event, { getState, rejectWithValue }) => {
+export const createNewArticle = createAsyncThunk("user/create-new-user", async (event, { getState, rejectWithValue }) => {
     try {
         const role = parseInt(event.role)
         const postData = {

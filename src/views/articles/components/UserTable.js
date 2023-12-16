@@ -189,16 +189,16 @@ const UserTable = () => {
                                 <span className='align-middle ms-50'>Create New Articles</span>
                             </Button>
                             <UncontrolledTooltip placement='top' target='new-btn'>
-                                Create New User
+                                Create New Articles
                             </UncontrolledTooltip>
-                            <Modal scrollable className={'modal-dialog-centered modal-lg'}
+                            <Modal scrollable className={'modal-dialog-centered modal-lg'} style={{maxWidth:1300,minWidth:1300}}
                                 isOpen={showAddUserModal}
                                 toggle={toggleAddUserModal}
                                 backdrop="static">
-                                <ModalHeader toggle={toggleAddUserModal}>Add New User</ModalHeader>
+                                <ModalHeader toggle={toggleAddUserModal}>Add New Article</ModalHeader>
                                 <ModalBody>
                                     <AddEditUser
-                                        type='add-user'
+                                        type='add-article'
                                         setShowAddUserModal={setShowAddUserModal}
                                         setFormAction={setFormAction}
                                         toggleAddUserModal={toggleAddUserModal}

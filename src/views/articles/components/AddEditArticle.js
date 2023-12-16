@@ -24,8 +24,11 @@ import { selectThemeColors } from '@utils'
 import '@styles/react/libs/react-select/_react-select.scss'
 
 // ** Actions
-import { createNewUser, editUser, getAllArticles } from '../store/action'
+import { createNewArticle, editUser, getAllArticles } from '../store/action'
 import { checkEmailID, getAllRoles } from '../../../redux/action'
+import SwitchBasic from '../../../@core/components/switch/SwitchBasic'
+import EditorUncontrolled from '../../../@core/components/draftWysiwyg/EditorUncontrolled'
+import FileUploaderMultiple from '../../../@core/components/fileuploader'
 
 const MySwal = withReactContent(Swal)
 
@@ -33,32 +36,19 @@ const AddEditUser = ({ type, setShowAddUserModal, rowInfo, setFormAction, toggle
 
     // ** Set Schema
     const AddEditUserSchema = yup.object().shape({
-        firstName: yup.string().required("FirstName is required.").min(4, "FirstName should be atleast 4 characters."),
-        lastName: yup.string().required("LastName is required.").min(4, "LastName should be atleast 4 characters."),
-        emailId: yup.string().required('Email-ID is required').
-            min(3, "Email-ID should be atleast 3 characters.").
-            email('Email-ID is invalid')
-            .test('is-agami-tech-email', 'Only "agami-tech.com" email addresses are allowed.', (value) => {
-                if (!value) return true
-                return value.endsWith('agami-tech.com')
-            }),
-        password: yup.string().required("Password is required").min(5, "Password length should be atleast 5 characters.").max(12, "Password cannot exceed more than 12 characters"),
-        confirmPassword: yup.string().required("Confirm Password is required").min(5, "Comfirm Password length should be atleast 5 characters.")
-            .max(12, "Comfirm Password cannot exceed more than 12 characters").oneOf([yup.ref('password')], 'Password does not match'),
-        // team: yup.string().required("Team is required."),
-        role: yup.string().required("Role is required.")
+        articleName: yup.string().required("Article Name is required.").min(4, "Article Name should be atleast 4 characters."),
+        role: yup.string().required("Category is required."),
+        subCategory: yup.string().required("Sub Category is required."),
+        articleDescription: yup.string().required("Article description is required.").min(4, "Article description should be atleast 4 characters."),
     }).required()
 
     // ** Hook
     const { reset, control, handleSubmit, formState: { errors }, setError } = useForm({
         defaultValues: {
-            firstName: '',
-            lastName: '',
-            emailId: '',
-            password: '',
-            confirmPassword: '',
-            // team: '',
-            role: ''
+            articleName: '',
+            role: '',
+            subCategory: '',
+            articleDescription: '',
         },
         mode: "onChange",
         resolver: yupResolver(AddEditUserSchema)
@@ -67,31 +57,47 @@ const AddEditUser = ({ type, setShowAddUserModal, rowInfo, setFormAction, toggle
     // ** Hooks & States
     const dispatch = useDispatch()
     const [isFormSubmitting, setFormSubmitting] = useState(false)
-    const [roles, setRoles] = useState([])
+    const [categorys, setCategory] = useState([])
+    const [subCategorys, setSubCategory] = useState([])
 
     useEffect(() => {
-        async function fetchRoles() {
+        async function fetchCategory() {
             try {
                 const response = await dispatch(getAllRoles()).unwrap()
                 const { role } = response
-                const rolesOptions = role.map(r => ({ value: r.role_id, label: r.role_name }))
-                setRoles(rolesOptions)
+                const categoryOptions = role.map(r => ({ value: r.role_id, label: r.role_name }))
+                setCategory(categoryOptions)
             } catch (error) {
                 showNotifications({
                     type: 'error',
                     title: 'Oops! Something went wrong!',
-                    message: `We cannot fetch roles data, please try again or contact support.`
+                    message: `We cannot fetch role data, please try again or contact support.`
                 })
             }
         }
-        fetchRoles()
+        async function fetchSubCategory() {
+            try {
+                const response = await dispatch(getAllRoles()).unwrap()
+                const { role } = response
+                const subCategoryOptions = role.map(r => ({ value: r.role_id, label: r.role_name }))
+                setSubCategory(subCategoryOptions)
+            } catch (error) {
+                showNotifications({
+                    type: 'error',
+                    title: 'Oops! Something went wrong!',
+                    message: `We cannot fetch role data, please try again or contact support.`
+                })
+            }
+        }
+        fetchCategory()
+        fetchSubCategory()
     }, [])
 
     useEffect(() => {
         if (type === 'edit-user') {
             reset({
-                firstName: rowInfo.firstName,
-                lastName: rowInfo.lastName,
+                articleName: rowInfo.articleName,
+                role: rowInfo.role,
                 emailId: rowInfo.email,
                 role: rowInfo.role_id
             })
@@ -101,20 +107,20 @@ const AddEditUser = ({ type, setShowAddUserModal, rowInfo, setFormAction, toggle
     const onSubmit = async (event) => {
         try {
             switch (type) {
-                case "add-user":
-                    const response = await dispatch(checkEmailID(event.emailId)).unwrap()
-                    if (response.message === "Email Already Exists.") {
-                        setError('emailId', {
-                            type: 'duplicate',
-                            message: 'Email ID already exists'
-                        })
-                        setFormSubmitting(false)
-                        return
-                    }
-                    dispatch(createNewUser(event)).unwrap()
+                case "add-article":
+                    // const response = await dispatch(checkEmailID(event.emailId)).unwrap()
+                    // if (response.message === "Email Already Exists.") {
+                    //     setError('emailId', {
+                    //         type: 'duplicate',
+                    //         message: 'Email ID already exists'
+                    //     })
+                    //     setFormSubmitting(false)
+                    //     return
+                    // }
+                    dispatch(createNewArticle(event)).unwrap()
                     MySwal.fire({
                         title: `Successfully Created!`,
-                        text: 'User has been added successfully.!',
+                        text: 'Article has been added successfully.!',
                         icon: 'success',
                         customClass: {
                             confirmButton: 'btn btn-primary'
@@ -146,12 +152,11 @@ const AddEditUser = ({ type, setShowAddUserModal, rowInfo, setFormAction, toggle
             toggleAddUserModal()
             setFormSubmitting(false)
             reset({
-                firstName: '',
-                lastName: '',
+                articleName: '',
+                role: '',
                 emailId: '',
                 password: '',
                 confirmPassword: '',
-                role: ''
             })
         } catch (error) {
             console.log("ERROR", error)
@@ -163,146 +168,30 @@ const AddEditUser = ({ type, setShowAddUserModal, rowInfo, setFormAction, toggle
             <Fragment>
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <Row className='gy-1 pt-75'>
-                        <Col md={6} xs={12}>
-                            <Label className="form-label" htmlFor="FirstName">
-                                First Name<span style={{ color: "red" }}> * </span>
+                        <Col md={12} xs={12}>
+                            <Label className="form-label" htmlFor="ArticleName">
+                                Article Name<span style={{ color: "red" }}> * </span>
                             </Label>
                             <Controller
                                 control={control}
-                                id='firstName'
-                                name='firstName'
+                                id='articleName'
+                                name='articleName'
                                 render={({ field }) => (
                                     <Input
-                                        id="firstName"
-                                        placeholder="Enter First Name"
-                                        className={errors.firstName ? 'is-invalid' : ''}
+                                        id="articleName"
+                                        placeholder="Enter Article Name"
+                                        className={errors.articleName ? 'is-invalid' : ''}
                                         {...field}
                                     />
                                 )}
                             />
-                            {errors.firstName && (
-                                <FormFeedback>{errors.firstName.message}</FormFeedback>
+                            {errors.articleName && (
+                                <FormFeedback>{errors.articleName.message}</FormFeedback>
                             )}
                         </Col>
                         <Col md={6} xs={12}>
-                            <Label className="form-label" htmlFor="LastName">
-                                Last Name<span style={{ color: "red" }}> * </span>
-                            </Label>
-                            <Controller
-                                control={control}
-                                id='lastName'
-                                name='lastName'
-                                render={({ field }) => (
-                                    <Input
-                                        id="lastname"
-                                        placeholder="Enter Last Name"
-                                        className={errors.lastName ? 'is-invalid' : ''}
-                                        {...field}
-                                    />)}
-                            />
-                            {errors.lastName && (
-                                <FormFeedback>{errors.lastName.message}</FormFeedback>
-                            )}
-                        </Col>
-                        <Col xs={12}>
-                            <Label className="form-label" htmlFor='emailId'>
-                                Email ID<span style={{ color: "red" }}> * </span>
-                            </Label>
-                            <Controller
-                                id='emailId'
-                                name='emailId'
-                                control={control}
-                                rules={{ required: 'Email ID is required' }}
-                                render={({ field }) => (
-                                    <Input
-                                        id='emailId'
-                                        placeholder='Enter Email ID'
-                                        className={type !== 'edit-user' && errors.emailId ? 'is-invalid' : ''}
-                                        {...field}
-                                        readOnly={type === 'edit-user'}
-                                    />
-                                )}
-                            />
-                            {/* IF FIELD IS EMPTY */}
-                            {errors.emailId && type !== 'edit-user' && (
-                                <FormFeedback>{errors.emailId.message}</FormFeedback>
-                            )}
-                        </Col>
-                        <Col md={6} xs={12}>
-                            <Label className="form-label" htmlFor="Password">
-                                Password<span style={{ color: "red" }}> * </span>
-                            </Label>
-                            <Controller
-                                control={control}
-                                id='password'
-                                name='password'
-                                render={({ field }) => (
-                                    <InputPasswordToggle
-                                        className='input-group-merge'
-                                        invalid={errors.password && true}
-                                        placeholder="Enter Password"
-                                        {...field}
-                                    />
-                                )}
-                            />
-                            {errors.password && (
-                                <FormFeedback>{errors.password.message}</FormFeedback>
-                            )}
-                        </Col>
-                        <Col md={6} xs={12}>
-                            <Label className="form-label" htmlFor="Comfirm-Password">
-                                Confirm Password<span style={{ color: "red" }}> * </span>
-                            </Label>
-                            <Controller
-                                control={control}
-                                id='confirmPassword'
-                                name='confirmPassword'
-                                render={({ field }) => (
-                                    <InputPasswordToggle
-                                        className='input-group-merge'
-                                        invalid={errors.confirmPassword && true}
-                                        placeholder="Enter Confirm Password"
-                                        {...field}
-                                    />
-                                )}
-                            />
-                            {errors.confirmPassword && (
-                                <FormFeedback>{errors.confirmPassword.message}</FormFeedback>
-                            )}
-                        </Col>
-                        {/* <Col md={6} xs={12}>
-                            <Label className="form-label" htmlFor="Team">
-                                Team<span style={{ color: "red" }}> * </span>
-                            </Label>
-                            <Controller
-                                control={control}
-                                name="team"
-                                render={({ field: { onChange, value, ref } }) => (
-                                    <Select
-                                        isClearable
-                                        inputId="team"
-                                        className={`react-select ${errors.team ? `is-invalid` : ``}`}
-                                        inputRef={ref}
-                                        theme={selectThemeColors}
-                                        placeholder="Select Team"
-                                        options={teamOptions}
-                                        classNamePrefix="select"
-                                        value={teamOptions.find(c => c.value === value) || ""}
-                                        onChange={val => {
-                                            const value = val ? val.value : ''
-                                            onChange(value)
-                                        }}
-                                        isOptionDisabled={(option) => option.isdisabled}
-                                    />
-                                )}
-                            />
-                            {errors.team && (
-                                <FormFeedback>{errors.team.message}</FormFeedback>
-                            )}
-                        </Col> */}
-                        <Col md={6} xs={12}>
-                            <Label className="form-label" htmlFor="Role">
-                                Role<span style={{ color: "red" }}> * </span>
+                            <Label className="form-label" htmlFor="Category">
+                                Category<span style={{ color: "red" }}> * </span>
                             </Label>
                             <Controller
                                 control={control}
@@ -314,10 +203,10 @@ const AddEditUser = ({ type, setShowAddUserModal, rowInfo, setFormAction, toggle
                                         className={`react-select ${errors.role ? `is-invalid` : ``}`}
                                         inputRef={ref}
                                         theme={selectThemeColors}
-                                        placeholder="Select Role"
-                                        options={roles}
+                                        placeholder="Select Category"
+                                        options={categorys}
                                         classNamePrefix="select"
-                                        value={roles.find(c => c.value === value) || ""}
+                                        value={categorys.find(c => c.value === value) || ""}
                                         onChange={val => {
                                             const value = val ? val.value : ''
                                             onChange(value)
@@ -326,6 +215,125 @@ const AddEditUser = ({ type, setShowAddUserModal, rowInfo, setFormAction, toggle
                                     />
                                 )}
                             />
+                            {errors.role && (
+                                <FormFeedback>{errors.role.message}</FormFeedback>
+                            )}
+                        </Col>
+                        <Col md={6} xs={12}>
+                            <Label className="form-label" htmlFor="SubCategory">
+                                Sub-Category<span style={{ color: "red" }}> * </span>
+                            </Label>
+                            <Controller
+                                control={control}
+                                name="subcategory"
+                                render={({ field: { onChange, value, ref } }) => (
+                                    <Select
+                                        isClearable
+                                        inputId="role"
+                                        className={`react-select ${errors.role ? `is-invalid` : ``}`}
+                                        inputRef={ref}
+                                        theme={selectThemeColors}
+                                        placeholder="Select Sub-Category"
+                                        options={subCategorys}
+                                        classNamePrefix="select"
+                                        value={subCategorys.find(c => c.value === value) || ""}
+                                        onChange={val => {
+                                            const value = val ? val.value : ''
+                                            onChange(value)
+                                        }}
+                                        isOptionDisabled={(option) => option.isdisabled}
+                                    />
+                                )}
+                            />
+                            {errors.role && (
+                                <FormFeedback>{errors.role.message}</FormFeedback>
+                            )}
+                        </Col>
+                        <Col md={12} xs={12}>
+                            <Label className="form-label" htmlFor="Role">
+                                Status<span style={{ color: "red" }}> * </span>
+                            </Label>
+                            <Controller
+                                control={control}
+                                name="status"
+                                render={({ field: { onChange, value, ref } }) => (
+                                    <SwitchBasic
+                                        isClearable
+                                        inputId="status"
+                                        inputRef={ref}
+                                        theme={selectThemeColors}
+                                        placeholder="Status"
+                                        options={categorys}
+                                        classNamePrefix="switch"
+                                        value={categorys.find(c => c.value === value) || ""}
+                                        onChange={val => {
+                                            const value = val ? val.value : ''
+                                            onChange(value)
+                                        }}
+                                        isOptionDisabled={(option) => option.isdisabled}
+                                    />
+                                )}
+                            />
+                            {errors.role && (
+                                <FormFeedback>{errors.role.message}</FormFeedback>
+                            )}
+                        </Col>
+                        <Col md={12} xs={12}>
+                            <Label className="form-label" htmlFor="Role">
+                                Article Description<span style={{ color: "red" }}> * </span>
+                            </Label>
+                            {/* <Controller
+                                control={control}
+                                name="status"
+                                render={({ field: { onChange, value, ref } }) => (
+                                    <SwitchBasic
+                                        isClearable
+                                        inputId="status"
+                                        inputRef={ref}
+                                        theme={selectThemeColors}
+                                        placeholder="Status"
+                                        options={roles}
+                                        classNamePrefix="switch"
+                                        value={roles.find(c => c.value === value) || ""}
+                                        onChange={val => {
+                                            const value = val ? val.value : ''
+                                            onChange(value)
+                                        }}
+                                        isOptionDisabled={(option) => option.isdisabled}
+                                    />
+                                )}
+                            /> */}
+                            <EditorUncontrolled />
+                            {errors.role && (
+                                <FormFeedback>{errors.role.message}</FormFeedback>
+                            )}
+                        </Col>
+                        <Col md={12} xs={12}>
+                            <Label className="form-label" htmlFor="Role">
+                                File Upload<span style={{ color: "red" }}> * </span>
+                            </Label>
+                            {/* <Controller
+                                control={control}
+                                name="status"
+                                render={({ field: { onChange, value, ref } }) => (
+                                    <SwitchBasic
+                                        isClearable
+                                        inputId="status"
+                                        inputRef={ref}
+                                        theme={selectThemeColors}
+                                        placeholder="Status"
+                                        options={roles}
+                                        classNamePrefix="switch"
+                                        value={roles.find(c => c.value === value) || ""}
+                                        onChange={val => {
+                                            const value = val ? val.value : ''
+                                            onChange(value)
+                                        }}
+                                        isOptionDisabled={(option) => option.isdisabled}
+                                    />
+                                )}
+                            /> */}
+                            <FileUploaderMultiple />
                             {errors.role && (
                                 <FormFeedback>{errors.role.message}</FormFeedback>
                             )}
