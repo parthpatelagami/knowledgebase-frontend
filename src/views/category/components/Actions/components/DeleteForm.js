@@ -3,7 +3,11 @@ import React, { Fragment, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 // ** Actions
-import { deleteCategory, getAllCategory } from "../../../store/action";
+import {
+  checkCategoryMapping,
+  deleteCategory,
+  getAllCategory,
+} from "../../../store/action";
 
 // ** Sweet Alert Import
 import Swal from "sweetalert2";
@@ -15,6 +19,7 @@ const DeleteForm = ({
   componentIndex,
   selectedAction,
   setFormAction,
+  setShowDeleteForm,
 }) => {
   // ** Hooks
   const dispatch = useDispatch();
@@ -36,6 +41,16 @@ const DeleteForm = ({
         allowOutsideClick: false,
         async preConfirm() {
           try {
+            const response = await dispatch(
+              checkCategoryMapping(rowInfo)
+            ).unwrap();
+            if (response.success === true) {
+              setFormAction(null);
+              MySwal.showValidationMessage(
+                `Oops! One or More Selected Category is Mapped With a Sub-Category`
+              );
+              return;
+            }
             await dispatch(deleteCategory(rowInfo)).unwrap();
             setFormAction(null);
             dispatch(getAllCategory());
@@ -63,6 +78,7 @@ const DeleteForm = ({
         }
       });
     }
+    if (setShowDeleteForm) setShowDeleteForm(false);
   }, [selectedAction]);
 
   return <Fragment></Fragment>;

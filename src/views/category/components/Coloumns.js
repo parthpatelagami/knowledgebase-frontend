@@ -10,13 +10,13 @@ export const columns = [
   {
     name: "Name",
     sortable: true,
-    minWidth: "25%",
+    minwidth: "25%",
     selector: (row) => row.name,
   },
   {
     name: "Created Date",
     sortable: true,
-    minWidth: "25%",
+    minwidth: "25%",
     selector: (row) =>
       moment(row.created_date).format("YYYY-MM-DD") === "Invalid date"
         ? " "
@@ -25,7 +25,7 @@ export const columns = [
   {
     name: "Status",
     sortable: true,
-    minWidth: "25%",
+    minwidth: "25%",
     selector: (row) => row.status,
     cell: (row) => (
       <div>

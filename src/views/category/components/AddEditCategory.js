@@ -197,27 +197,17 @@ const AddEditCategory = ({
                 id='status'
                 name='status'
                 render={({ field }) => (
-                  <FormGroup tag='fieldset'>
-                    <FormGroup check>
-                      <Input
-                        name='status'
-                        id='statusActive'
-                        type='radio'
-                        checked={field.value === 1}
-                        onChange={() => field.onChange(1)}
-                      />
-                      <Label check>Active</Label>
-                    </FormGroup>
-                    <FormGroup check>
-                      <Input
-                        name='status'
-                        id='statusDeactive'
-                        type='radio'
-                        checked={field.value === 0}
-                        onChange={() => field.onChange(0)}
-                      />
-                      <Label check>Deactive</Label>
-                    </FormGroup>
+                  <FormGroup className='mb-0' switch>
+                    <Input
+                      type='switch'
+                      id='statusSwitch'
+                      role='switch'
+                      checked={field.value === 1}
+                      onChange={(e) => field.onChange(e.target.checked ? 1 : 0)}
+                    />
+                    <Label check htmlFor='statusSwitch'>
+                      {field.value === 1 ? "Active" : "Inactive"}
+                    </Label>
                   </FormGroup>
                 )}
               />
