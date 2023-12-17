@@ -92,9 +92,7 @@ export const editUser = createAsyncThunk("user/edit-user", async (event, { getSt
 
 export const deleteArticle = createAsyncThunk("articles/delete-articles", async (event, { getState, rejectWithValue }) => {
     try {
-        const response = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/article/deletearticle`, {
-            id: event.ID
-        })
+        const response = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/article/deletearticle/${event.ID}`)
 
         const { status, data } = response
         if (status === 200) {

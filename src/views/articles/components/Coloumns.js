@@ -26,6 +26,12 @@ export const columns = [
         selector: row => row.SubCategory_id
     },
     {
+        name: 'Status',
+        sortable: true,
+        minWidth: '300px',
+        selector: row => row.Status
+    },
+    {
         name: 'Created_Date',
         sortable: true,
         minWidth: '150px',
