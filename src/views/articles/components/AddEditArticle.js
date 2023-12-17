@@ -39,6 +39,7 @@ import { checkEmailID, getAllRoles } from "../../../redux/action";
 import EditorUncontrolled from "../../../@core/components/draftWysiwyg/EditorUncontrolled";
 import FileUploaderMultiple from "../../../@core/components/fileuploader";
 import { getUUID } from "../store/action";
+import {getAllCategory} from "../../category/store/action"
 
 const MySwal = withReactContent(Swal);
 
@@ -90,6 +91,8 @@ const AddEditUser = ({
   const [editorContent, setEditorContent] = useState("");
   const [UUID, setUUID] = useState("");
   const [userId, setUserId] = useState(0);
+  const [files, setFiles] = useState([])
+  const [filesName, setFilesName] = useState([])
 
   const handleContentChange = (htmlValue) => {
     setEditorContent(htmlValue);
@@ -98,11 +101,11 @@ const AddEditUser = ({
   useEffect(() => {
     async function fetchCategory() {
       try {
-        const response = await dispatch(getAllRoles()).unwrap();
-        const category = response.role;
-        const categoryOptions = category.map((r) => ({
-          value: r.role_id,
-          label: r.role_name,
+        const response = await dispatch(getAllCategory()).unwrap();
+        const categoryOptions = response.filter((r) => r.status === 1)
+        .map((r) => ({
+          value: r.category_id,
+          label: r.name,
         }));
         setCategory(categoryOptions);
       } catch (error) {
@@ -154,10 +157,10 @@ const AddEditUser = ({
   useEffect(() => {
     if (type === "edit-user") {
       reset({
-        articleName: rowInfo.articleName,
+        articleName: rowInfo.Name,
         role: rowInfo.role,
-        emailId: rowInfo.email,
         role: rowInfo.role_id,
+        category: rowInfo.Category_id
       });
     }
   }, [type]);
@@ -165,6 +168,8 @@ const AddEditUser = ({
   const onSubmit = async (event) => {
     event.uuid = UUID;
     event.userId = userId;
+    event.Attachments = filesName;
+    console.log(filesName)
     try {
       switch (type) {
         case "add-article":
@@ -354,7 +359,7 @@ const AddEditUser = ({
                 control={control}
                 name="articleAttachment"
                 render={({ field: { onChange, value, ref } }) => (
-                  <FileUploaderMultiple />
+                  <FileUploaderMultiple uuid={UUID} files={files} setFiles={setFiles} filesName={filesName} setFilesName={setFilesName}/>
                 )}
               />
 

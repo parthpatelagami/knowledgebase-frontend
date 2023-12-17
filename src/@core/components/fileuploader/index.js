@@ -11,8 +11,12 @@ import { useDropzone } from 'react-dropzone'
 import { FileText, X, DownloadCloud } from 'react-feather'
 import { showNotifications } from "@components/Notifications";
 
-const FileUploaderMultiple = () => {
-  const [files, setFiles] = useState([])
+const FileUploaderMultiple = (props) => {
+  const uuid = props.uuid;
+  const files = props.files;
+  const setFiles = props.setFiles;
+  const filesName = props.filesName;
+  const setFilesName = props.setFilesName;
   const maxSize = 10 * 1024 * 1024; //10MB
   const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx','csv'];
   const maxFileCount = 5;
@@ -50,31 +54,34 @@ const FileUploaderMultiple = () => {
           message: 'Invalid files:', invalidFiles,
         });
       }
-
-      setFiles(prevFiles => [...prevFiles, ...validFiles]);
-      
-      validFiles.forEach((file) => {
-      const formData = new FormData();
-      formData.append('file', file);
-      console.log(formData)
-      
-      fetch('http://127.0.1.1:8080/api/v1/article/upload-attachements', {
-        method: 'POST',
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log('Upload success:', data);
+      else {
+        setFiles(prevFiles => [...prevFiles, ...validFiles]);
+        validFiles.forEach((file) => {
+          setFilesName(prevFiles => [...prevFiles, file.name]);
+        });
+                
+        validFiles.forEach((file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        fetch('http://127.0.1.1:8080/api/v1/article/upload-attachements/'+uuid, {
+          method: 'POST',
+          body: formData,
         })
-        .catch((error) => {
-          console.error('Error uploading file:', error);
-          showNotifications({
-            type: "error",
-            title: "Oops! Something went wrong!",
-            message: `File Upload ERROR`,
+          .then((response) => response.json())
+          .then((data) => {
+            console.log('Upload success:', data);
+          })
+          .catch((error) => {
+            console.error('Error uploading file:', error);
+            showNotifications({
+              type: "error",
+              title: "Oops! Something went wrong!",
+              message: `File Upload ERROR`,
+            });
           });
         });
-      });
+      }
     }
   })
 
