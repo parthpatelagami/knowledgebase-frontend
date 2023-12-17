@@ -39,7 +39,6 @@ import { checkEmailID, getAllRoles } from "../../../redux/action";
 import EditorUncontrolled from "../../../@core/components/draftWysiwyg/EditorUncontrolled";
 import FileUploaderMultiple from "../../../@core/components/fileuploader";
 import { getUUID } from "../store/action";
-import FileUpload from "../../../@core/components/fileuploader/demo";
 
 const MySwal = withReactContent(Swal);
 
