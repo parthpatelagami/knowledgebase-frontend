@@ -155,7 +155,8 @@ const AddEditUser = ({
   }, []);
 
   useEffect(() => {
-    if (type === "edit-user") {
+    if (type === "edit-articles") {
+      setUUID(rowInfo.uuid);
       reset({
         articleName: rowInfo.Name,
         role: rowInfo.role,
@@ -187,9 +188,9 @@ const AddEditUser = ({
           setFormAction(null);
           dispatch(getAllArticles());
           break;
-        case "edit-user":
-          const user_id = rowInfo.user_id;
-          await dispatch(editUser({ event, user_id })).unwrap();
+        case "edit-articles":
+          const article_id = rowInfo.ID;
+          await dispatch(editUser({ event, article_id })).unwrap();
           MySwal.fire({
             title: `Successfully Updated!`,
             text: "User has been updated successfully.!",

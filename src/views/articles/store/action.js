@@ -62,20 +62,29 @@ export const getAllArticles = createAsyncThunk("article/getallarticle", async (e
 }
 )
 
-export const editUser = createAsyncThunk("user/edit-user", async (event, { getState, rejectWithValue }) => {
+export const editUser = createAsyncThunk("user/edit-article", async ({event,article_id}, { getState, rejectWithValue }) => {
     try {
-        const role = parseInt(event.event.role)
         const postData = {
-            "user_id": event.user_id,
-            "firstName": event.event.firstName,
-            "lastName": event.event.lastName,
-            "email": event.event.emailId,
-            "password": event.event.password,
-            "role_id": role,
-            "updated_date": moment().format('YYYY-MM-DD'),
-            "updated_by": getState().auth.userData.firstName + " " + getState().auth.userData.lastName
+            // "user_id": event.user_id,
+            // "firstName": event.event.firstName,
+            // "lastName": event.event.lastName,
+            // "email": event.event.emailId,
+            // "password": event.event.password,
+            // "role_id": role,
+            // "updated_date": moment().format('YYYY-MM-DD'),
+            // "updated_by": getState().auth.userData.firstName + " " + getState().auth.userData.lastName
+            "Name": event.articleName,
+            "Category_id": event.category,
+            "SubCategory_id": event.subCategory,
+            "Status": event.status,
+            "Created_by": event.userId,
+            "Updated_by":event.userId,
+            "Updated_date": moment().format('YYYY-MM-DD hh:mm:ss'),
+            "Content": event.articleDescription,
+            "Attachments":event.Attachments,
+            "Article_UUID":event.uuid
         }
-        const response = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/users/edit_users`, postData)
+        const response = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/article/editarticle/`+article_id, postData)
         const { status, data } = response
         const { status_code, detail: errorDetail } = data
         if (status === 200 && !status_code) {

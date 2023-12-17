@@ -25,7 +25,7 @@ const EditForm = ({ componentIndex, selectedAction, rowInfo, setFormAction, }) =
             <ModalHeader onClick={() => setFormAction(null)}>Edit User</ModalHeader>
             <ModalBody>
                 <AddEditUser
-                    type='edit-user'
+                    type='edit-articles'
                     setShowAddUserModal={setShowAddUserModal}
                     rowInfo={rowInfo}
                     setFormAction={setFormAction}
