@@ -74,6 +74,8 @@ const AddEditUser = ({ type, setShowAddUserModal, rowInfo, setFormAction, toggle
             try {
                 const response = await dispatch(getAllRoles()).unwrap()
                 const { role } = response
+                console.log(response)
+
                 const rolesOptions = role.map(r => ({ value: r.role_id, label: r.role_name }))
                 setRoles(rolesOptions)
             } catch (error) {

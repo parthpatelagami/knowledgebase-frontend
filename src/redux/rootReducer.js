@@ -7,6 +7,7 @@ import permissions from '@src/views/permission/role-table/store'
 import users from '@src/views/users/store'
 import team from '@src/views/team/store'
 import task from '@src/views/task/store'
+import subcategory from '@src/views/subategory/store'
 
 const rootReducer = {
   auth,
@@ -16,7 +17,8 @@ const rootReducer = {
   users,
   team,
   permissions,
-  task
+  task,
+  subcategory
 }
 
 export default rootReducer
