@@ -38,6 +38,7 @@ const EditForm = ({
           setShowAddCategoryModal={setShowAddCategoryModal}
           rowInfo={rowInfo}
           setFormAction={setFormAction}
+          toggleAddCategoryModal={toggleAddCategoryModal}
         />
       </ModalBody>
     </Modal>

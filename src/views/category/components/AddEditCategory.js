@@ -38,6 +38,7 @@ import {
   createNewCategory,
   editCategory,
   getAllCategory,
+  checkCategoryMapping,
 } from "../store/action";
 import { checkCategory } from "../../../redux/action";
 
@@ -135,6 +136,19 @@ const AddEditCategory = ({
           break;
         case "edit-category":
           const category_id = rowInfo.category_id;
+          const response = await dispatch(
+            checkCategoryMapping(category_id)
+          ).unwrap();
+          if (response.success === true && event.status === 0) {
+            setFormAction(null);
+
+            MySwal.fire({
+              icon: "error",
+              title: "Oops!",
+              text: "One or more selected categories are mapped with a sub-category.",
+            });
+            return;
+          }
           await dispatch(editCategory({ event, category_id })).unwrap();
           MySwal.fire({
             title: `Successfully Updated!`,

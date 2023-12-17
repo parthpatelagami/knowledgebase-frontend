@@ -231,11 +231,8 @@ export const checkCategory = createAsyncThunk(
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_ENDPOINT}/api/v1/category/check_category`,
-        {
-          category: event,
-        }
+        event
       );
-      console.log("Category RESPONSE ::: ", response);
       const { status, data } = response;
       if (status === 200) {
         return data;

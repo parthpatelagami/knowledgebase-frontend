@@ -109,7 +109,7 @@ export const deleteCategory = createAsyncThunk(
       const response = await axios.post(
         `${process.env.REACT_APP_API_ENDPOINT}/api/v1/category/delete_category`,
         {
-          category_id: value,
+          id: value,
         }
       );
 
