@@ -9,19 +9,22 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 // ** Third Party Components
 import moment from "moment"
 
-export const createNewArticle = createAsyncThunk("user/create-new-user", async (event, { getState, rejectWithValue }) => {
+export const createNewArticle = createAsyncThunk("article/create-new-article", async (event, { getState, rejectWithValue }) => {
+    console.log(event)
     try {
-        const role = parseInt(event.role)
         const postData = {
-            "firstName": event.firstName,
-            "lastName": event.lastName,
-            "email": event.emailId,
-            "password": event.password,
-            "role_id": role,
-            "created_date": moment().format('YYYY-MM-DD'),
-            "created_by": getState().auth.userData.firstName + " " + getState().auth.userData.lastName
+            "Name": event.articleName,
+            "Category_id": event.category,
+            "SubCategory_id": event.subCategory,
+            "Status": event.status,
+            "Created_by": event.userId,
+            "Updated_by":event.userId,
+            "Updated_date": moment().format('YYYY-MM-DD hh:mm:ss'),
+            "Content": event.articleDescription,
+            "Attachments":["Hello.txt","Hello2.txt"],
+            "Article_UUID":event.uuid
         }
-        const response = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/users/add_new_user`, postData)
+        const response = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/article/create-new-article`, postData)
         const { status, data } = response
         const { status_code, detail: errorDetail } = data
         if (status === 201 && !status_code) {

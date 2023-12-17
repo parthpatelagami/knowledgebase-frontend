@@ -1,20 +1,80 @@
 // ** React Imports
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useEffect } from 'react'
+import { useDispatch } from "react-redux";
 
 // ** Reactstrap Imports
 import { Card, CardBody, Button, ListGroup, ListGroupItem } from 'reactstrap'
 
 // ** Third Party Imports
 import { useDropzone } from 'react-dropzone'
+
 import { FileText, X, DownloadCloud } from 'react-feather'
+import { showNotifications } from "@components/Notifications";
 
 const FileUploaderMultiple = () => {
-  // ** State
   const [files, setFiles] = useState([])
+  const maxSize = 10 * 1024 * 1024; //10MB
+  const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx','csv'];
+  const maxFileCount = 5;
 
   const { getRootProps, getInputProps } = useDropzone({
-    onDrop: acceptedFiles => {
-      setFiles([...files, ...acceptedFiles.map(file => Object.assign(file))])
+    onDrop: async acceptedFiles => {
+      let validFiles = [];
+      let invalidFiles = [];
+
+      if (acceptedFiles.length + files.length > maxFileCount) {
+        console.error('File count exceeds the limit:', acceptedFiles);
+        showNotifications({
+          type: "error",
+          title: 'File count exceeds the limit',
+          message: 'File count exceeds the limit: ', acceptedFiles,
+        });
+        return;
+      }
+
+      for (const file of acceptedFiles) {
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+
+        if (file.size <= maxSize && allowedExtensions.includes(fileExtension)) {
+          validFiles.push(Object.assign(file));
+        } else {
+          invalidFiles.push(file);
+        }
+      }
+
+      if (invalidFiles.length > 0) {
+        console.error('Invalid files:', invalidFiles);
+        showNotifications({
+          type: "error",
+          title: 'Invalid files',
+          message: 'Invalid files:', invalidFiles,
+        });
+      }
+
+      setFiles(prevFiles => [...prevFiles, ...validFiles]);
+      
+      validFiles.forEach((file) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      console.log(formData)
+      
+      fetch('http://127.0.1.1:8080/api/v1/article/upload-attachements', {
+        method: 'POST',
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Upload success:', data);
+        })
+        .catch((error) => {
+          console.error('Error uploading file:', error);
+          showNotifications({
+            type: "error",
+            title: "Oops! Something went wrong!",
+            message: `File Upload ERROR`,
+          });
+        });
+      });
     }
   })
 

@@ -1,24 +1,30 @@
-// ** React Imports
-import { Fragment } from 'react'
-import { Editor } from 'react-draft-wysiwyg'
-
-
-// ** Reactstrap Imports
-import { Row, Col } from 'reactstrap'
-import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
-
-// ** Demo Components
-import ExtensionsHeader from '@components/extensions-header'
-
 // ** Styles
 import '@styles/react/libs/editor/editor.scss'
 
-const EditorUncontrolled = () => {
+import React, { useState } from 'react';
+import { EditorState, convertToRaw } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import draftToHtml from 'draftjs-to-html';
+
+function EditorUncontrolled({ onContentChange,error }) {
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+  const onEditorStateChange = (newEditorState) => {
+    setEditorState(newEditorState);
+    const htmlValue = draftToHtml(convertToRaw(newEditorState.getCurrentContent()));
+    onContentChange(htmlValue);
+  };
+
   return (
-    <Fragment>
-        <Editor />
-    </Fragment>
-  )
+    <div>
+      <Editor
+        editorState={editorState}
+        wrapperClassName="demo-wrapper"
+        editorClassName="demo-editor"
+        onEditorStateChange={onEditorStateChange}
+      />
+    </div>
+  );
 }
 
-export default EditorUncontrolled
+export default EditorUncontrolled;

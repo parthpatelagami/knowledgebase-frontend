@@ -162,6 +162,7 @@ export const authSlice = createSlice({
         state.loading = false
         state.userData = action.payload
         localStorage.setItem('userData', JSON.stringify(action.payload))
+        localStorage.setItem('userId', JSON.stringify(action.payload.user_id))
       })
       .addCase(handleLogin.rejected, (state) => {
         state.loading = false
