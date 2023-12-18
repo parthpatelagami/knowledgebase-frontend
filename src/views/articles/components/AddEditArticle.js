@@ -163,8 +163,7 @@ const AddEditUser = ({
       setUUID(rowInfo.uuid);
       reset({
         articleName: rowInfo.Name,
-        role: rowInfo.role,
-        role: rowInfo.role_id,
+        status: rowInfo.Status,
         category: rowInfo.Category_id
       });
     }
@@ -338,7 +337,7 @@ const AddEditUser = ({
                       onChange={(e) => {
                         onChange(e.target.checked ? 1 : 0);
                       }}
-                      defaultChecked={true}
+                      checked={value === 1}
                     />
                   </div>
                 )}
