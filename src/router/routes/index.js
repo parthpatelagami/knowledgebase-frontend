@@ -10,8 +10,8 @@ import MiscellaneousRoutes from "./Miscellaneous";
 import ArticlesRoutes from "./Articles";
 import CategoryRoutes from "./Category";
 // import Category from './Category'
-// import subCategory from './SubCategory'
-// import KnowledgeBaseRoutes from './knowledgeBase'
+import subCategory from './SubCategory'
+import KnowledgeBaseRoutes from './KnowledgeBase'
 
 // ** Document title
 const TemplateTitle = "%s - Vuexy React Admin Template";
@@ -30,8 +30,8 @@ const Routes = [
   ...PermissionsRoutes,
   ...ArticlesRoutes,
   ...CategoryRoutes,
-  // ...subCategory,
-  // ...KnowledgeBaseRoutes
+  ...subCategory,
+  ...KnowledgeBaseRoutes
 ];
 
 export { DefaultRoute, TemplateTitle, Routes };

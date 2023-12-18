@@ -38,6 +38,7 @@ import {
   createNewCategory,
   editCategory,
   getAllCategory,
+  checkCategoryMapping,
 } from "../store/action";
 import { checkCategory } from "../../../redux/action";
 
@@ -57,7 +58,30 @@ const AddEditCategory = ({
       name: yup
         .string()
         .required("Name is required.")
-        .min(4, "Name should be atleast 4 characters."),
+        .min(4, "Name should be atleast 4 characters.")
+        .test(
+          "Duplicate-Category",
+          "Category Name already exist",
+          async function (value) {
+            if (value) {
+              try {
+                const categoryId =
+                  type === "edit-category" ? rowInfo.category_id : null;
+                const response = await dispatch(
+                  checkCategory({ name: value, id: categoryId })
+                ).unwrap();
+                if (response.success === true) {
+                  return false;
+                } else {
+                  return true;
+                }
+              } catch (error) {
+                return false;
+              }
+            }
+            return true;
+          }
+        ),
     })
     .required();
 
@@ -96,15 +120,6 @@ const AddEditCategory = ({
     try {
       switch (type) {
         case "add-category":
-          const response = await dispatch(checkCategory(event.name)).unwrap();
-          if (response.message === "Category Already Exists.") {
-            setError("category", {
-              type: "duplicate",
-              message: "Category already exists",
-            });
-            setFormSubmitting(false);
-            return;
-          }
           dispatch(createNewCategory(event)).unwrap();
           MySwal.fire({
             title: `Successfully Created!`,
@@ -121,6 +136,19 @@ const AddEditCategory = ({
           break;
         case "edit-category":
           const category_id = rowInfo.category_id;
+          const response = await dispatch(
+            checkCategoryMapping(category_id)
+          ).unwrap();
+          if (response.success === true && event.status === 0) {
+            setFormAction(null);
+
+            MySwal.fire({
+              icon: "error",
+              title: "Oops!",
+              text: "One or more selected categories are mapped with a sub-category.",
+            });
+            return;
+          }
           await dispatch(editCategory({ event, category_id })).unwrap();
           MySwal.fire({
             title: `Successfully Updated!`,
@@ -176,34 +204,24 @@ const AddEditCategory = ({
             </Col>
             <Col md={6} xs={12}>
               <Label className='form-label' htmlFor='status'>
-                Status
+                Status<span style={{ color: "red" }}> * </span>
               </Label>
               <Controller
                 control={control}
                 id='status'
                 name='status'
                 render={({ field }) => (
-                  <FormGroup tag='fieldset'>
-                    <FormGroup check>
-                      <Input
-                        name='status'
-                        id='statusActive'
-                        type='radio'
-                        checked={field.value === 1}
-                        onChange={() => field.onChange(1)}
-                      />
-                      <Label check>Active</Label>
-                    </FormGroup>
-                    <FormGroup check>
-                      <Input
-                        name='status'
-                        id='statusDeactive'
-                        type='radio'
-                        checked={field.value === 0}
-                        onChange={() => field.onChange(0)}
-                      />
-                      <Label check>Deactive</Label>
-                    </FormGroup>
+                  <FormGroup className='mb-0' switch>
+                    <Input
+                      type='switch'
+                      id='statusSwitch'
+                      role='switch'
+                      checked={field.value === 1}
+                      onChange={(e) => field.onChange(e.target.checked ? 1 : 0)}
+                    />
+                    <Label check htmlFor='statusSwitch'>
+                      {field.value === 1 ? "Active" : "Inactive"}
+                    </Label>
                   </FormGroup>
                 )}
               />
