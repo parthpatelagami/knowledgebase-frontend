@@ -59,7 +59,7 @@ const AddEditUser = ({
         .required("Article Name is required.")
         .min(4, "Article Name should be atleast 4 characters."),
       category: yup.string().required("Category is required."),
-      subCategory: yup.string().required("Sub Category is required."),
+      // subCategory: yup.string().required("Sub Category is required."),
     })
     .required();
 
@@ -77,7 +77,7 @@ const AddEditUser = ({
       subCategory: "",
       articleDescription: "",
       articleAttachment: "",
-      status: "",
+      status: 1,
     },
     mode: "onChange",
     resolver: yupResolver(AddEditUserSchema),
@@ -87,7 +87,7 @@ const AddEditUser = ({
   const dispatch = useDispatch();
   const [isFormSubmitting, setFormSubmitting] = useState(false);
   const [categorys, setCategory] = useState([]);
-  const [subCategorys, setSubCategory] = useState([]);
+  //const [subCategorys, setSubCategory] = useState([]);
   const [editorContent, setEditorContent] = useState("");
   const [UUID, setUUID] = useState("");
   const [userId, setUserId] = useState(0);
@@ -134,7 +134,7 @@ const AddEditUser = ({
       }
     }
     fetchCategory();
-    fetchSubCategory();
+    //fetchSubCategory();
     getRandomUUID();
     getCurrentUserId();
 
@@ -170,7 +170,14 @@ const AddEditUser = ({
     event.uuid = UUID;
     event.userId = userId;
     event.Attachments = filesName;
-    console.log(filesName)
+    const category = categorys.filter((category) => category.value == 1);
+
+    if (category.length > 0) {
+      const categoryName = category[0].label;
+      event.categoryName = categoryName;
+    } else {
+      event.categoryName = "";
+    }
     try {
       switch (type) {
         case "add-article":
@@ -279,7 +286,7 @@ const AddEditUser = ({
                 <FormFeedback>{errors.category.message}</FormFeedback>
               )}
             </Col>
-            <Col md={6} xs={12}>
+            {/* <Col md={6} xs={12}>
               <Label className="form-label" htmlFor="SubCategory">
                 Sub-Category<span style={{ color: "red" }}> * </span>
               </Label>
@@ -310,7 +317,7 @@ const AddEditUser = ({
               {errors.subCategory && (
                 <FormFeedback>{errors.subCategory.message}</FormFeedback>
               )}
-            </Col>
+            </Col> */}
             <Col md={12} xs={12}>
               <Label className="form-label" htmlFor="Status">
                 Status<span style={{ color: "red" }}> * </span>
@@ -327,7 +334,7 @@ const AddEditUser = ({
                       onChange={(e) => {
                         onChange(e.target.checked ? 1 : 0);
                       }}
-                      defaultChecked={value === 1}
+                      defaultChecked={true}
                     />
                   </div>
                 )}

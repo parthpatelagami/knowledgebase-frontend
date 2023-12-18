@@ -15,7 +15,7 @@ export const createNewArticle = createAsyncThunk("article/create-new-article", a
         const postData = {
             "Name": event.articleName,
             "Category_id": event.category,
-            "SubCategory_id": event.subCategory,
+            // "SubCategory_id": event.subCategory,
             "Status": event.status,
             "Created_by": event.userId,
             "Updated_by":event.userId,
@@ -131,6 +131,30 @@ export const suspendUser = createAsyncThunk("user/suspend-users", async (event, 
         const { status, data } = response
         if (status === 200) {
             return data.users
+        } else {
+            return rejectWithValue(errorDetail)
+        }
+    } catch (error) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+}
+)
+
+export const deleteArticleAttachement = createAsyncThunk("article/delete-attachements", async (event, { getState, rejectWithValue }) => {
+    try {
+        const postData = {
+            "fileName": event.fileName,
+            "uuid":event.uuid
+        }
+        const response = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/article/delete-attachements`, postData)
+        const { status, data } = response
+        const { status_code, detail: errorDetail } = data
+        if (status === 201 && !status_code) {
+            return data
         } else {
             return rejectWithValue(errorDetail)
         }

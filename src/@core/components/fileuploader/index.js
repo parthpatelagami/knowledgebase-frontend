@@ -10,6 +10,11 @@ import { useDropzone } from 'react-dropzone'
 
 import { FileText, X, DownloadCloud } from 'react-feather'
 import { showNotifications } from "@components/Notifications";
+import { deleteArticleAttachement } from '../../../views/articles/store/action';
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+const MySwal = withReactContent(Swal);
+
 
 const FileUploaderMultiple = (props) => {
   const uuid = props.uuid;
@@ -20,6 +25,7 @@ const FileUploaderMultiple = (props) => {
   const maxSize = 10 * 1024 * 1024; //10MB
   const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx','csv'];
   const maxFileCount = 5;
+  const dispatch = useDispatch();
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: async acceptedFiles => {
@@ -96,7 +102,30 @@ const FileUploaderMultiple = (props) => {
   const handleRemoveFile = file => {
     const uploadedFiles = files
     const filtered = uploadedFiles.filter(i => i.name !== file.name)
+    const event = {
+      fileName:file.name,
+      uuid:uuid
+    }
+    dispatch(deleteArticleAttachement(event)).unwrap();
+          MySwal.fire({
+            title: `Successfully Deleted!`,
+            text: "Article Attachement has been deleted successfully.!",
+            icon: "success",
+            customClass: {
+              confirmButton: "btn btn-primary",
+            },
+            buttonsStyling: false,
+          });
     setFiles([...filtered])
+    if(filtered.length > 0) {
+      filtered.forEach((file) => {
+        setFilesName([file.name]);
+      });
+    }
+    else {
+      setFilesName([])
+    }
+    
   }
 
   const renderFileSize = size => {
@@ -146,12 +175,11 @@ const FileUploaderMultiple = (props) => {
         {files.length ? (
           <Fragment>
             <ListGroup className='my-2'>{fileList}</ListGroup>
-            <div className='d-flex justify-content-end'>
+            {/* <div className='d-flex justify-content-end'>
               <Button className='me-1' color='danger' outline onClick={handleRemoveAllFiles}>
                 Remove All
               </Button>
-              <Button color='primary'>Upload Files</Button>
-            </div>
+            </div> */}
           </Fragment>
         ) : null}
       </CardBody>
