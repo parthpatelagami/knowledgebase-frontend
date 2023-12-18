@@ -9,7 +9,18 @@ const KnowledgeBaseRoutes = [
         //     action: 'view',
         //     resource: 'History'
         // }
-    }
+    },
+    {
+        path: '/knowledgebase/:category',
+        component: lazy(()=> import('@src/views/knowledgebase/components/KnowledgeBasecategory')),
+        exact: true
+    },
+    {
+        path: '/knowledgebase/:category/:question',
+        component: lazy(()=> import('@src/views/knowledgebase/components/KnowledgeBaseSubcategory')),
+        exact: true
+    },
 ]
 
 export default KnowledgeBaseRoutes
+
