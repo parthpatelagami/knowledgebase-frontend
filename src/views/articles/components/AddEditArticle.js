@@ -173,7 +173,7 @@ const AddEditUser = ({
     event.uuid = UUID;
     event.userId = userId;
     event.Attachments = filesName;
-    const category = categorys.filter((category) => category.value == 1);
+    const category = categorys.filter((categorytmp) => categorytmp.value == parseInt(event.category));
 
     if (category.length > 0) {
       const categoryName = category[0].label;
