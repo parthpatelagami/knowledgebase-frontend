@@ -22,7 +22,8 @@ export const createNewArticle = createAsyncThunk("article/create-new-article", a
             "Updated_date": moment().format('YYYY-MM-DD hh:mm:ss'),
             "Content": event.articleDescription,
             "Attachments":event.Attachments,
-            "Article_UUID":event.uuid
+            "Article_UUID":event.uuid,
+            "Category_Name":event.categoryName
         }
         const response = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/article/create-new-article`, postData)
         const { status, data } = response
