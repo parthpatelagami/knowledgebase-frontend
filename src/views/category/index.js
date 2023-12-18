@@ -1,5 +1,11 @@
 import React from "react";
-const CategoryList = () => {
-  return <div className='app-user-list'>Category</div>;
+import CategoryTable from "./components/CategoryTable";
+
+const CategorysList = () => {
+  return (
+    <div className='app-user-list'>
+      <CategoryTable />
+    </div>
+  );
 };
-export default CategoryList;
+export default CategorysList;

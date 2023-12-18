@@ -1,14 +1,11 @@
-import { lazy } from 'react'
+import { lazy } from "react";
 
 const ArticlesRoutes = [
   {
-    path: '/articles',
-    component: lazy(() => import('@src/views/articles')),
+    path: "/articles",
+    component: lazy(() => import("@src/views/articles")),
     exact: true,
-    meta: {
-      authRoute: true
-    }
-  }
-]
+  },
+];
 
-export default ArticlesRoutes
+export default ArticlesRoutes;
