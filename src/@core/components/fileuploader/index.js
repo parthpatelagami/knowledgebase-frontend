@@ -27,6 +27,7 @@ const FileUploaderMultiple = (props) => {
   const maxFileCount = 5;
   const dispatch = useDispatch();
   const dbFileNameForEdit=props.dbFileNameForEdit.length>0? props.dbFileNameForEdit:[];
+  const SetdbFileNameForEdit=props.SetdbFileNameForEdit;
   const ArticleID=props.article_id;
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -129,6 +130,34 @@ const FileUploaderMultiple = (props) => {
     }
     
   }
+  const handleEditedFile = file => {
+    const filtered = dbFileNameForEdit.filter(i => i !== file)
+    const event = {
+      fileName:file,
+      uuid:uuid
+    }
+    dispatch(deleteArticleAttachement(event)).unwrap();
+          MySwal.fire({
+            title: `Successfully Deleted!`,
+            text: "Article Attachement has been deleted successfully.!",
+            icon: "success",
+            customClass: {
+              confirmButton: "btn btn-primary",
+            },
+            buttonsStyling: false,
+          });
+    //setFiles([...filtered])
+    SetdbFileNameForEdit([...filtered])
+    if(filtered.length > 0) {
+      filtered.forEach((file) => {
+        setFilesName([file]);
+      });
+    }
+    else {
+      setFilesName([])
+    }
+    
+  }
 
   const renderFileSize = size => {
     if (Math.round(size / 100) / 10 > 1000) {
@@ -160,7 +189,7 @@ const FileUploaderMultiple = (props) => {
           <p className='file-name mb-0'>{file}</p>
         </div>
       </div>
-      <Button color='danger' outline size='sm' className='btn-icon' onClick={() => handleRemoveFile(file)}>
+      <Button color='danger' outline size='sm' className='btn-icon' onClick={() => handleEditedFile(file)}>
         <X size={14} />
       </Button>
     </ListGroupItem>

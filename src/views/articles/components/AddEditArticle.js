@@ -159,6 +159,7 @@ const AddEditUser = ({
   useEffect(() => {
     if (type === "edit-articles") {
       SetdbFileNameForEdit(rowInfo.attachments);
+      setFilesName(rowInfo.attachments);
       setUUID(rowInfo.uuid);
       reset({
         articleName: rowInfo.Name,
@@ -370,7 +371,7 @@ const AddEditUser = ({
                 control={control}
                 name="articleAttachment"
                 render={({ field: { onChange, value, ref } }) => (
-                  <FileUploaderMultiple uuid={UUID} files={files} setFiles={setFiles} filesName={filesName} setFilesName={setFilesName} dbFileNameForEdit={dbFileNameForEdit} article_id={ArticleID}/>
+                  <FileUploaderMultiple uuid={UUID} files={files} setFiles={setFiles} filesName={filesName} setFilesName={setFilesName} dbFileNameForEdit={dbFileNameForEdit} SetdbFileNameForEdit={SetdbFileNameForEdit} article_id={ArticleID}/>
                 )}
               />
 
