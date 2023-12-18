@@ -9,7 +9,7 @@ import task from '@src/views/task/store'
 import subcategory from '@src/views/subategory/store'
 import navbar from "./navbar";
 import category from "@src/views/category/store";
-
+import articles from '@src/views/articles/store'
 const rootReducer = {
   auth,
   navbar,
@@ -21,6 +21,7 @@ const rootReducer = {
   task,
   subcategory,
   category,
+  articles
 };
 
 export default rootReducer;
