@@ -168,3 +168,26 @@ export const deleteArticleAttachement = createAsyncThunk("article/delete-attache
     }
 }
 )
+export const tranferFileOnEdit = createAsyncThunk("article/tranfer-attachements", async ({ArticleID,UUID}, { getState, rejectWithValue }) => {
+    try {
+        const postData = {
+            "id": ArticleID,
+            "uuid":UUID
+        }
+        const response = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/article/tranferfileOnEdit`, postData)
+        const { status, data } = response
+        const { status_code, detail: errorDetail } = data
+        if (status === 201 && !status_code) {
+            return data
+        } else {
+            return rejectWithValue(errorDetail)
+        }
+    } catch (error) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+}
+)

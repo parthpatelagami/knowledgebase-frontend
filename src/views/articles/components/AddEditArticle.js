@@ -34,12 +34,13 @@ import { selectThemeColors } from "@utils";
 import "@styles/react/libs/react-select/_react-select.scss";
 
 // ** Actions
-import { createNewArticle, editUser, getAllArticles } from "../store/action";
+import { createNewArticle, editUser, getAllArticles,tranferFileOnEdit} from "../store/action";
 import { checkEmailID, getAllRoles } from "../../../redux/action";
 import EditorUncontrolled from "../../../@core/components/draftWysiwyg/EditorUncontrolled";
 import FileUploaderMultiple from "../../../@core/components/fileuploader";
 import { getUUID } from "../store/action";
 import {getAllCategory} from "../../category/store/action"
+import { func } from "prop-types";
 
 const MySwal = withReactContent(Swal);
 
@@ -153,7 +154,13 @@ const AddEditUser = ({
             }
         }
     }
-    
+    async function tranferFileOnEditModal(){
+        if(type == 'edit-articles'){
+          const response = await dispatch(tranferFileOnEdit({ArticleID:rowInfo.ID,UUID:rowInfo.uuid})).unwrap();
+        }
+    }
+
+    tranferFileOnEditModal();
   }, []);
 
   useEffect(() => {
@@ -356,7 +363,7 @@ const AddEditUser = ({
                       handleContentChange(content);
                       onChange(content);
                     }}
-                    HtmlContent={rowInfo.Content}
+                    HtmlContent={rowInfo!=undefined ? rowInfo.Content : undefined}
                     value={value}
                     error={errors.articleAttachment}
                   />
