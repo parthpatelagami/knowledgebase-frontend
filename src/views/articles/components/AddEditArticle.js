@@ -356,6 +356,7 @@ const AddEditUser = ({
                       handleContentChange(content);
                       onChange(content);
                     }}
+                    HtmlContent={rowInfo.Content}
                     value={value}
                     error={errors.articleAttachment}
                   />
