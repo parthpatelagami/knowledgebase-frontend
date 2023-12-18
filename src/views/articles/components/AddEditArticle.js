@@ -93,6 +93,8 @@ const AddEditUser = ({
   const [userId, setUserId] = useState(0);
   const [files, setFiles] = useState([])
   const [filesName, setFilesName] = useState([])
+  const [dbFileNameForEdit,SetdbFileNameForEdit]=useState([]);
+  const ArticleID=rowInfo!==undefined && rowInfo.ID!==undefined ? rowInfo.ID : "";
 
   const handleContentChange = (htmlValue) => {
     setEditorContent(htmlValue);
@@ -156,6 +158,7 @@ const AddEditUser = ({
 
   useEffect(() => {
     if (type === "edit-articles") {
+      SetdbFileNameForEdit(rowInfo.attachments);
       setUUID(rowInfo.uuid);
       reset({
         articleName: rowInfo.Name,
@@ -367,7 +370,7 @@ const AddEditUser = ({
                 control={control}
                 name="articleAttachment"
                 render={({ field: { onChange, value, ref } }) => (
-                  <FileUploaderMultiple uuid={UUID} files={files} setFiles={setFiles} filesName={filesName} setFilesName={setFilesName}/>
+                  <FileUploaderMultiple uuid={UUID} files={files} setFiles={setFiles} filesName={filesName} setFilesName={setFilesName} dbFileNameForEdit={dbFileNameForEdit} article_id={ArticleID}/>
                 )}
               />
 

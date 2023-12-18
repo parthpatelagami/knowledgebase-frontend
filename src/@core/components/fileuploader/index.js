@@ -26,6 +26,8 @@ const FileUploaderMultiple = (props) => {
   const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx','csv'];
   const maxFileCount = 5;
   const dispatch = useDispatch();
+  const dbFileNameForEdit=props.dbFileNameForEdit.length>0? props.dbFileNameForEdit:[];
+  const ArticleID=props.article_id;
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: async acceptedFiles => {
@@ -150,6 +152,19 @@ const FileUploaderMultiple = (props) => {
       </Button>
     </ListGroupItem>
   ))
+  const dbfileList = dbFileNameForEdit.length>0 && dbFileNameForEdit.map((file, index) => (
+    <ListGroupItem key={`${file}-${index}`} className='d-flex align-items-center justify-content-between'>
+      <div className='file-details d-flex align-items-center'>
+        <div className='file-preview me-1'><img className='rounded' alt={file} src={process.env.REACT_APP_API_ENDPOINT+"/attachment_"+ArticleID+"/"+file} height='28' width='28' /></div>
+        <div>
+          <p className='file-name mb-0'>{file}</p>
+        </div>
+      </div>
+      <Button color='danger' outline size='sm' className='btn-icon' onClick={() => handleRemoveFile(file)}>
+        <X size={14} />
+      </Button>
+    </ListGroupItem>
+  ))
 
   const handleRemoveAllFiles = () => {
     setFiles([])
@@ -172,13 +187,14 @@ const FileUploaderMultiple = (props) => {
             </p>
           </div>
         </div>
-        {files.length ? (
+        {files.length || dbFileNameForEdit.length>0 ? (
           <Fragment>
-            <ListGroup className='my-2'>{fileList}</ListGroup>
+            <ListGroup className='my-2'>{dbfileList}{fileList}</ListGroup>
             {/* <div className='d-flex justify-content-end'>
               <Button className='me-1' color='danger' outline onClick={handleRemoveAllFiles}>
                 Remove All
               </Button>
+              <Button color='primary'>Upload Files</Button>
             </div> */}
           </Fragment>
         ) : null}
