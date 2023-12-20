@@ -33,12 +33,6 @@ const Actions = ({ rowInfo }) => {
             Icon: Trash,
             Component: DeleteForm,
             visible: ability.can("edit", 'Users')
-        },
-        {
-            name: name,
-            Icon: rowInfo.isSuspended === 'N' ? ShieldOff : Shield,
-            Component: SuspendForm,
-            visible: ability.can("edit", 'Users')
         }
     ]
 
