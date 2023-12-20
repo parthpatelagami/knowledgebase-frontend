@@ -43,9 +43,9 @@ export const createNewArticle = createAsyncThunk("article/create-new-article", a
 }
 )
 
-export const getAllArticles = createAsyncThunk("article/getallarticle", async (event, { getState, rejectWithValue }) => {
+export const getAllArticles = createAsyncThunk("article/get_all_article", async (event, { getState, rejectWithValue }) => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/article/getallarticle`, {})
+        const response = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/article/getallarticle`, {})
         console.log("GET ALL Article RESPONSE ::: ", response)
         const { status, data } = response
         if (status === 200) {

@@ -29,7 +29,20 @@ export const columns = [
         name: 'Status',
         sortable: true,
         minWidth: '300px',
-        selector: row => row.Status
+        selector: row => row.Status,
+        cell: (row) => (
+            <div>
+              {row.Status === 1 ? (
+                <Badge color='light-success' pill>
+                  Active
+                </Badge>
+              ) : (
+                <Badge color='light-warning' pill>
+                  Inactive
+                </Badge>
+              )}
+            </div>
+          ),
     },
     {
         name: 'Created_Date',
