@@ -63,8 +63,9 @@ export const getAllArticles = createAsyncThunk("article/getallarticle", async (e
 }
 )
 
-export const editUser = createAsyncThunk("user/edit-article", async ({event,article_id}, { getState, rejectWithValue }) => {
+export const editUser = createAsyncThunk("user/edit-article", async ({event,article_id,preeditedcontent}, { getState, rejectWithValue }) => {
     try {
+        const htmlContent=event.articleDescription!=null && event.articleDescription!="" ? event.articleDescription : preeditedcontent
         const postData = {
             // "user_id": event.user_id,
             // "firstName": event.event.firstName,
@@ -81,9 +82,10 @@ export const editUser = createAsyncThunk("user/edit-article", async ({event,arti
             "Created_by": event.userId,
             "Updated_by":event.userId,
             "Updated_date": moment().format('YYYY-MM-DD hh:mm:ss'),
-            "Content": event.articleDescription,
+            "Content": htmlContent,
             "Attachments":event.Attachments,
-            "Article_UUID":event.uuid
+            "Article_UUID":event.uuid,
+            "Category_Name":event.categoryName
         }
         const response = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/article/editarticle/`+article_id, postData)
         const { status, data } = response

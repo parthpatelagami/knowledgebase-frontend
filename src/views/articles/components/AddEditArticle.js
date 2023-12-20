@@ -207,7 +207,8 @@ const AddEditUser = ({
           break;
         case "edit-articles":
           const article_id = rowInfo.ID;
-          await dispatch(editUser({ event, article_id })).unwrap();
+          const preeditedcontent=rowInfo.Content;
+          await dispatch(editUser({ event, article_id,preeditedcontent })).unwrap();
           MySwal.fire({
             title: `Successfully Updated!`,
             text: "User has been updated successfully.!",
