@@ -171,7 +171,7 @@ const UserTable = () => {
                 <CardHeader className='flex-md-row flex-column align-md-items-center align-items-start border-bottom'>
                     <CardTitle tag='h4'>Articles</CardTitle>
                     <div className='d-flex mt-md-0 mt-1'>
-                        <UncontrolledButtonDropdown>
+                        {/* <UncontrolledButtonDropdown>
                             <DropdownToggle color='secondary' caret outline>
                                 <Share size={15} />
                                 <span className='align-middle ms-50'>Export</span>
@@ -182,7 +182,7 @@ const UserTable = () => {
                                     <span className='align-middle ms-50'>CSV</span>
                                 </DropdownItem>
                             </DropdownMenu>
-                        </UncontrolledButtonDropdown>
+                        </UncontrolledButtonDropdown> */}
                         <Fragment>
                             <Button className='ms-1' id="new-btn" color='primary' onClick={toggleAddUserModal}>
                                 <PlusCircle size={14} />

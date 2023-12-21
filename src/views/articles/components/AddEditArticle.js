@@ -1,7 +1,7 @@
 
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState,useRef,useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import JoditEditor from 'jodit-react';
 // ** Reactstrap Imports
 import {
   Row,
@@ -23,7 +23,6 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 // ** Custom Componenets
-import InputPasswordToggle from "@components/input-password-toggle";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { showNotifications } from "@components/Notifications";
 
@@ -35,12 +34,9 @@ import "@styles/react/libs/react-select/_react-select.scss";
 
 // ** Actions
 import { createNewArticle, editUser, getAllArticles,tranferFileOnEdit} from "../store/action";
-import { checkEmailID, getAllRoles } from "../../../redux/action";
-import EditorUncontrolled from "../../../@core/components/draftWysiwyg/EditorUncontrolled";
+import { getAllRoles } from "../../../redux/action";
 import FileUploaderMultiple from "../../../@core/components/fileuploader";
-import { getUUID } from "../store/action";
 import {getAllCategory} from "../../category/store/action"
-import { func } from "prop-types";
 
 const MySwal = withReactContent(Swal);
 
@@ -89,17 +85,21 @@ const AddEditUser = ({
   const [isFormSubmitting, setFormSubmitting] = useState(false);
   const [categorys, setCategory] = useState([]);
   //const [subCategorys, setSubCategory] = useState([]);
-  const [editorContent, setEditorContent] = useState("");
   const [UUID, setUUID] = useState("");
   const [userId, setUserId] = useState(0);
   const [files, setFiles] = useState([])
   const [filesName, setFilesName] = useState([])
   const [dbFileNameForEdit,SetdbFileNameForEdit]=useState([]);
   const ArticleID=rowInfo!==undefined && rowInfo.ID!==undefined ? rowInfo.ID : "";
-
-  const handleContentChange = (htmlValue) => {
-    setEditorContent(htmlValue);
-  };
+  const editor = useRef(null);
+  const [content, setContent] = useState(rowInfo!=undefined && rowInfo.Content!="" ? rowInfo.Content : "");
+  const config = {
+    placeholder:"Start Typing",
+    minHeight: 300,
+    "showCharsCounter": false,
+    "showWordsCounter": false,
+    "showXPathInStatusbar": false
+  }
 
   useEffect(() => {
     async function fetchCategory() {
@@ -191,6 +191,7 @@ const AddEditUser = ({
     try {
       switch (type) {
         case "add-article":
+          event.content=content;
           dispatch(createNewArticle(event)).unwrap();
           MySwal.fire({
             title: `Successfully Created!`,
@@ -206,6 +207,7 @@ const AddEditUser = ({
           dispatch(getAllArticles());
           break;
         case "edit-articles":
+          event.content=content;
           const article_id = rowInfo.ID;
           const preeditedcontent=rowInfo.Content;
           await dispatch(editUser({ event, article_id,preeditedcontent })).unwrap();
@@ -359,15 +361,14 @@ const AddEditUser = ({
                 control={control}
                 name="articleDescription"
                 render={({ field: { onChange, value, ref } }) => (
-                  <EditorUncontrolled
-                    onContentChange={(content) => {
-                      handleContentChange(content);
-                      onChange(content);
-                    }}
-                    HtmlContent={rowInfo!=undefined ? rowInfo.Content : undefined}
-                    value={value}
-                    error={errors.articleAttachment}
-                  />
+                  <JoditEditor
+                    ref={editor}
+                    value={content}
+                    config={config}
+                    tabIndex={1} // tabIndex of textarea
+                    onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+                    onChange={newContent => {}}
+		              />
                 )}
               />
             </Col>

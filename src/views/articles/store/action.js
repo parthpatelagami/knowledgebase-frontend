@@ -20,7 +20,7 @@ export const createNewArticle = createAsyncThunk("article/create-new-article", a
             "Created_by": event.userId,
             "Updated_by":event.userId,
             "Updated_date": moment().format('YYYY-MM-DD hh:mm:ss'),
-            "Content": event.articleDescription,
+            "Content": event.content,
             "Attachments":event.Attachments,
             "Article_UUID":event.uuid,
             "Category_Name":event.categoryName
@@ -82,7 +82,7 @@ export const editUser = createAsyncThunk("user/edit-article", async ({event,arti
             "Created_by": event.userId,
             "Updated_by":event.userId,
             "Updated_date": moment().format('YYYY-MM-DD hh:mm:ss'),
-            "Content": htmlContent,
+            "Content": event.content,
             "Attachments":event.Attachments,
             "Article_UUID":event.uuid,
             "Category_Name":event.categoryName
