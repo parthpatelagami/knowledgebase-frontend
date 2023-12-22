@@ -5,8 +5,8 @@ export default [
     {
         id: 'knowledge-base',
         title: 'Knowledge Base',
-        icon: <BookOpen size={20} />,
+        icon: <BookOpen size={30} />,
         navLink: '/knowledgebase',
-        parentOf: ['/knowledgebase/category/questions', '/knowledgebase/category']
+        parentOf: ['/knowledgebase/:category/:articles', '/knowledgebase/:category']
     }
 ]

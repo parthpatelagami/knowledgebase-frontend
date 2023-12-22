@@ -1,36 +1,44 @@
 // ** Icons Imports
-import { Search } from 'react-feather'
 
-// require('dotenv').config();
+import { useDispatch } from 'react-redux'
+import { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+
 // ** Reactstrap Imports
 import { Card, CardBody, CardText, Form,Col, Label, Input, InputGroup, InputGroupText } from 'reactstrap'
 import AsyncSelect from 'react-select/async'
-import axios from 'axios'
 
-const KnowledgeBaseFilter = ({ searchTerm, setSearchTerm, handleFilter }) => {
-  // const onChange = e => {
-  //   if (handleFilter) {
-  //     handleFilter(e)
-  //   } else {
-  //     setSearchTerm(e.target.value)
-  //   }
-  // }
-  const onloadSearchArticle = async (event) => {
-    console.log(event);
-    try {
-      const res = await axios.get(`http://192.168.1.122:8081/api/v1/article/searcharticle/${event}`);
-      console.log(res);
-      // Handle the response as needed
-    } catch (error) {
-      console.error("Error:", error);
-    }
+import { searchArticle } from '../../articles/store/action';
+import { Link } from 'react-feather';
+
+const KnowledgeBaseFilter = () => {
+
+  const [query, setQuery] = useState('')
+  const [selectedDBVal, setSelectedDBVal] = useState(null)
+  const dispatch = useDispatch();  
+
+  const handleDBInputChange = newValue => {
+    setQuery(newValue)
+  }
+
+  const loadOptionsDB = async (query) => {
+
+    const response = await dispatch(searchArticle(query));
+   
+    let response1 = response.payload; 
+    const options = response.payload.map(item => ({
+      label: item.Name, 
+      value: item.Category_id 
+    }));
+ 
+    return options;  
   };
-
-  const handleInputChange = newValue => {
-    const val = newValue.replace(/\W/g, '')
-    onloadSearchArticle(val);
-    console.log("Input: ", val)
-    return val
+  
+  const history = useHistory();
+  const handleDBChange = value => {
+    console.log("value", value);
+    history.push(`/knowledgebase/${value.value}/${value.value}`);
+    setSelectedDBVal(value)
   }
   return (
     <div id='knowledge-base-search'>
@@ -47,22 +55,23 @@ const KnowledgeBaseFilter = ({ searchTerm, setSearchTerm, handleFilter }) => {
           <CardText className='mb-2 text-center'>
             Popular searches: <span className='fw-bolder'>Sales automation, Email marketing</span>
           </CardText>
-          <Form className='kb-search-input' onSubmit={e => e.preventDefault()}>
-            <div style={{ alignItems: "center", justifyContent: "center"}} >
+          <div style={{ position:'relative' }}>
+            <div style={{ display:'flex' , alignItems: "center", justifyContent: "center"}} >
               <Col md={6} xs={12} className='mb-1'>
                 <AsyncSelect
-                  isClearable={false}
-                  className='react-select'
-                  classNamePrefix='Search Article'
-                  name='callback-react-select'
-                
-                  defaultOptions
-                  onInputChange={handleInputChange}
-                  // theme={selectThemeColors}
+                 defaultOptions
+                //  isClearable={false}
+                 value={selectedDBVal}
+                 name='db-react-select'
+                 className='react-select'
+                 classNamePrefix='Search Articles'
+                 onChange={handleDBChange}
+                 loadOptions={loadOptionsDB}
+                 onInputChange={handleDBInputChange}
                 />
               </Col>
           </div> 
-          </Form>
+          </div>
         </CardBody>
       </Card>
     </div>

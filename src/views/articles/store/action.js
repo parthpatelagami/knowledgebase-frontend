@@ -193,3 +193,63 @@ export const tranferFileOnEdit = createAsyncThunk("article/tranfer-attachements"
     }
 }
 )
+
+export const searchArticle = createAsyncThunk("articles/searcharticle", async (event, { getState, rejectWithValue }) => {
+    
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/article/seracharticle/${event}`)
+        const { status, data } = response
+        if (status === 200) {
+            return data.articles
+        } else {
+            return rejectWithValue(errorDetail)
+        }
+    } catch (error) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+}
+)
+
+export const getCategoryWiseArticleData = createAsyncThunk("articles/getcategorydata", async (event, { getState, rejectWithValue }) => {
+    
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/article/getallcategorydata`)   
+        const { status, data } = response
+        if (status === 200) {
+            return data.articles
+        } else {
+            return rejectWithValue(errorDetail)
+        }
+    } catch (error) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+}
+)
+
+export const getArticlesData = createAsyncThunk("articles/getarticlesdata", async (event, { getState, rejectWithValue }) => {
+   
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/article/getarticlesdata/${event}`)
+        const { status, data } = response
+        if (status === 200) {
+            return data.articlesdata
+        } else {
+            return rejectWithValue(errorDetail)
+        }
+    } catch (error) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+}
+)

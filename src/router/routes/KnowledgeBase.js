@@ -16,7 +16,7 @@ const KnowledgeBaseRoutes = [
         exact: true
     },
     {
-        path: '/knowledgebase/:category/:question',
+        path: '/knowledgebase/:category/:articles',
         component: lazy(()=> import('@src/views/knowledgebase/components/KnowledgeBaseSubcategory')),
         exact: true
     },
