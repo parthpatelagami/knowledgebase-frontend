@@ -4,7 +4,7 @@ import { useState , useEffect} from 'react'
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 
-import { Info, Smartphone} from 'react-feather'
+import { Info, Smartphone } from 'react-feather'
 // ** Reactstrap Imports
 import {
   Nav,
@@ -16,12 +16,14 @@ import {
   TabContent,
   Card, 
   CardBody,
-  CardTitle
+  CardTitle,
+  Button
 } from 'reactstrap'
+
  
 import { getArticlesData } from '../../articles/store/action'
 import { useDispatch } from 'react-redux';
-const KnowledgeBaseCategory = () => {
+const knowledgebaseSerchArticle = () => {
 
   const dispatch = useDispatch() 
   const [activeTab, setActiveTab] = useState(1);
@@ -30,18 +32,18 @@ const KnowledgeBaseCategory = () => {
   const params = useParams();
 
   useEffect(()=>{
-    let categoryId =  params.category;
-    let articleId = params.articleId;
-    
+    let categoryId =  params.searchcategoryid;
+    let articleId = params.searcharticlesid;
     async function fetchData(categoryId){
       const response = await dispatch(getArticlesData(categoryId))
+      
       setData(response.payload);
       
     }
     setActiveTab(parseInt(articleId));
     fetchData(categoryId);
   },[])
-  // ** States
+ 
   const toggleTab = tab => setActiveTab(tab)
 
   const renderTabs = () => {
@@ -50,8 +52,8 @@ const KnowledgeBaseCategory = () => {
       item.articledata.map(item => {
        
         return (        
-          <NavItem key={item.id} tag='li'>
-            <NavLink active={activeTab === item.id} onClick={() => toggleTab(item.id)}>
+          <NavItem key={item.article_id} tag='li'>
+            <NavLink active={activeTab === item.article_id} onClick={() => toggleTab(item.article_id)}>
               <span className='fw-bold'>{item.name}</span>
             </NavLink>
           </NavItem>            
@@ -64,9 +66,8 @@ const KnowledgeBaseCategory = () => {
   const renderTabContent = () => {
     return data.map(item => {
       return item.articledata.map(item =>{
-        
         return (        
-          <TabPane key={item.id} tabId={item.id}>
+          <TabPane key={item.article_id} tabId={item.article_id}>
             <Card>
                <CardBody>
                  <CardTitle className='mb-1'>
@@ -115,4 +116,4 @@ const KnowledgeBaseCategory = () => {
   )
 }
 
-export default KnowledgeBaseCategory
+export default knowledgebaseSerchArticle

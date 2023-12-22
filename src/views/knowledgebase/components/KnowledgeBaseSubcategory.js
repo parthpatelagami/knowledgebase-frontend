@@ -3,9 +3,8 @@
 import { useState , useEffect} from 'react'
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
-// ** Icons Imports
-import * as Icon from 'react-feather'
-import { Info, Smartphone, ArrowLeft, Link } from 'react-feather'
+
+import { Info, Smartphone } from 'react-feather'
 // ** Reactstrap Imports
 import {
   Nav,
@@ -21,8 +20,6 @@ import {
   Button
 } from 'reactstrap'
 
-// ** Images
-// import illustration from '@src/assets/images/illustration/faq-illustrations.svg'
  
 import { getArticlesData } from '../../articles/store/action'
 import { useDispatch } from 'react-redux';
@@ -44,21 +41,31 @@ const KnowledgeBaseSubCategory = () => {
     
     fetchData(categoryId);
   },[])
-  // ** States
+ 
   const toggleTab = tab => setActiveTab(tab)
 
   const renderTabs = () => {
     return data.map(item => {
       return (
-      item.articledata.map(item => {
-        return (        
-          <NavItem key={item.id} tag='li'>
-            <NavLink active={activeTab === item.id} onClick={() => toggleTab(item.id)}>
-              <span className='fw-bold'>{item.name}</span>
-            </NavLink>
-          </NavItem>            
-        )
-      }))
+        item.articledata.length ? (item.articledata.map(item => {
+          return (        
+            <NavItem key={item.id} tag='li'>
+              <NavLink active={activeTab === item.id} onClick={() => toggleTab(item.id)}>
+                <span className='fw-bold'>{item.name}</span>
+              </NavLink>
+            </NavItem>            
+          )
+        })) :(
+          <div className='text-center p-1'>
+            <h5 className='p-0'>              
+              No Articles Found !!!              
+            </h5>
+          </div>
+        ) 
+      )
+      
+      
+      
       
     })
   }
@@ -102,7 +109,7 @@ const KnowledgeBaseSubCategory = () => {
             <CardBody>
               <h4 className='kb-title'>
                  <Info size={20} className='me-50' />
-                 <span>All Articles</span>
+                 <span>{params.categoryname}</span>
               </h4>
               <Nav tag='ul' className='nav-left mt-2' pills vertical>
                 {renderTabs()}

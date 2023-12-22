@@ -24,11 +24,11 @@ const KnowledgeBaseFilter = () => {
   const loadOptionsDB = async (query) => {
 
     const response = await dispatch(searchArticle(query));
-   
-    let response1 = response.payload; 
     const options = response.payload.map(item => ({
       label: item.Name, 
-      value: item.Category_id 
+      value: item.Category_id,
+      id : item.id,
+      category_name: item.Category_name
     }));
  
     return options;  
@@ -36,8 +36,7 @@ const KnowledgeBaseFilter = () => {
   
   const history = useHistory();
   const handleDBChange = value => {
-    console.log("value", value);
-    history.push(`/knowledgebase/${value.value}/${value.value}`);
+    history.push(`/knowledgebase/searcharticle/${value.value}/${value.id}/${value.category_name}`);
     setSelectedDBVal(value)
   }
   return (
